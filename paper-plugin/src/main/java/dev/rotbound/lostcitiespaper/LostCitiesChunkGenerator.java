@@ -58,12 +58,14 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
 
     @Override
     public boolean shouldGenerateDecorations(WorldInfo worldInfo, Random random, int chunkX, int chunkZ) {
-        return cityAtChunk(worldInfo.getSeed(), chunkX, chunkZ) == null;
+        return cityAtChunk(worldInfo.getSeed(), chunkX, chunkZ) == null
+                && cityTransitionAtChunk(worldInfo.getSeed(), chunkX, chunkZ) == null;
     }
 
     @Override
     public boolean shouldGenerateStructures(WorldInfo worldInfo, Random random, int chunkX, int chunkZ) {
-        return cityAtChunk(worldInfo.getSeed(), chunkX, chunkZ) == null;
+        return cityAtChunk(worldInfo.getSeed(), chunkX, chunkZ) == null
+                && cityTransitionAtChunk(worldInfo.getSeed(), chunkX, chunkZ) == null;
     }
 
     @Override
