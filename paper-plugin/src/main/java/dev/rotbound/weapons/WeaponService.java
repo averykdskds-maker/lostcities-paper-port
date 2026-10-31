@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -55,6 +56,7 @@ public final class WeaponService implements Listener {
     private final Map<UUID, Map<WeaponType, Long>> cooldowns = new HashMap<>();
     private final Map<UUID, BukkitTask> minigunTasks = new HashMap<>();
     private final Map<UUID, Integer> minigunHeat = new HashMap<>();
+    private final Map<UUID, BukkitTask> mortarTasks = new HashMap<>();
     private final Set<Material> supportedAmmo = EnumSet.noneOf(Material.class);
     private BukkitTask coolingTask;
 
@@ -167,7 +169,9 @@ public final class WeaponService implements Listener {
     public void onMortarExplode(EntityExplodeEvent event) {
         if (!(event.getEntity() instanceof TNTPrimed tnt)) return;
         if (!tnt.getPersistentDataContainer().has(mortarKey, PersistentDataType.BYTE)) return;
-        event.blockList().clear();
+        event.blockList().clear(); // Mortar blasts must never destroy generated buildings or terrain.
+        BukkitTask task = mortarTasks.remove(tnt.getUniqueId());
+        if (task != null) task.cancel();
         tnt.setSilent(true);
     }
 
@@ -200,8 +204,7 @@ public final class WeaponService implements Listener {
                 }
             }
             case FLAMETHROWER -> spawnFireball(player, type);
-            case GRENADE -> spawnThrowableVisual(player, type, Material.ENDER_PEARL, type.velocity(),
-                    spread(player.getEyeLocation().getDirection(), 0.015));
+            case GRENADE -> launchGrenade(player, type);
             case SMG -> {
                 for (int i = 0; i < 3; i++) {
                     final int delay = i * 5;
@@ -267,14 +270,47 @@ public final class WeaponService implements Listener {
         projectileData.put(fireball.getUniqueId(), new ShotData(player.getUniqueId(), type, type.damage()));
     }
 
+    private void launchGrenade(Player player, WeaponType type) {
+        // Native EnderPearl gives the grenade its actual vanilla projectile model,
+        // ballistic drop and block collision. A null shooter prevents pearl teleportation.
+        EnderPearl grenade = player.getWorld().spawn(player.getEyeLocation(), EnderPearl.class);
+        grenade.setShooter(null);
+        grenade.setVelocity(spread(player.getEyeLocation().getDirection(), 0.015).multiply(type.velocity()));
+        grenade.setGravity(true);
+        grenade.setSilent(true);
+        projectileData.put(grenade.getUniqueId(), new ShotData(player.getUniqueId(), type, type.damage()));
+    }
+
     private void launchMortar(Player player) {
         TNTPrimed tnt = player.getWorld().spawn(player.getEyeLocation(), TNTPrimed.class);
-        tnt.setVelocity(player.getEyeLocation().getDirection().normalize().multiply(2.5).add(new Vector(0, 2.5, 0)));
-        tnt.setFuseTicks(plugin.getConfig().getInt("weapons.mortar.fuse-ticks", 80));
+        Vector forward = player.getEyeLocation().getDirection().clone().setY(0).normalize();
+        if (forward.lengthSquared() < 0.001) forward = new Vector(0, 0, 1);
+        tnt.setVelocity(forward.multiply(2.48).add(new Vector(0, 2.48, 0)));
+        // Long safety fuse; a server task shortens it as soon as the shell lands.
+        tnt.setFuseTicks(plugin.getConfig().getInt("weapons.mortar.fuse-ticks", 1200));
         tnt.setYield((float) plugin.getConfig().getDouble("weapons.mortar.yield", 4.0));
         tnt.setIsIncendiary(false);
         tnt.setSilent(true);
         tnt.getPersistentDataContainer().set(mortarKey, PersistentDataType.BYTE, (byte) 1);
+
+        UUID id = tnt.getUniqueId();
+        BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+            private int ticks;
+            @Override public void run() {
+                if (!tnt.isValid()) {
+                    BukkitTask self = mortarTasks.remove(id);
+                    if (self != null) self.cancel();
+                    return;
+                }
+                ticks++;
+                if (ticks >= 6 && (tnt.isOnGround() || ticks >= 20 * 30)) {
+                    tnt.setFuseTicks(1);
+                    BukkitTask self = mortarTasks.remove(id);
+                    if (self != null) self.cancel();
+                }
+            }
+        }, 1L, 1L);
+        mortarTasks.put(id, task);
     }
 
     private void toggleMinigun(Player player) {
@@ -391,7 +427,9 @@ public final class WeaponService implements Listener {
     public void shutdown() {
         if (coolingTask != null) coolingTask.cancel();
         for (BukkitTask task : minigunTasks.values()) task.cancel();
+        for (BukkitTask task : mortarTasks.values()) task.cancel();
         minigunTasks.clear();
+        mortarTasks.clear();
         projectileData.clear();
         cooldowns.clear();
         minigunHeat.clear();
