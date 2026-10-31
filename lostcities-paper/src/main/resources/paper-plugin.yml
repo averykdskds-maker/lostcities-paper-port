@@ -3,4 +3,5 @@ version: '${version}'
 main: dev.rotbound.lostcitiespaper.LostCitiesPaperPlugin
 bootstrapper: dev.rotbound.lostcitiespaper.LostCitiesPaperBootstrap
 api-version: '26.3'
+load: STARTUP
 description: Source port of Lost Cities 26.3 with Modern Tweaks assets.

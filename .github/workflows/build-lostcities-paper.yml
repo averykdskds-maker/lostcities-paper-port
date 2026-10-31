@@ -117,6 +117,13 @@ jobs:
           grep -q 'Lost Cities Paper port enabled' server.log || { echo "Plugin main class did not finish enabling."; exit 1; }
           grep -q 'Attached original Lost Cities generation to world' server.log || { echo "Lost Cities populator did not attach to the target world."; exit 1; }
           grep -q 'Lost Cities FEATURES generation entered' server.log || { echo "The forced chunk did not enter the Lost Cities FEATURES callback."; exit 1; }
+          attach_line="$(grep -n -m1 'Attached original Lost Cities generation to world' server.log | cut -d: -f1)"
+          spawn_ready_line="$(grep -n -m1 'Prepared spawn area in' server.log | cut -d: -f1)"
+          features_line="$(grep -n -m1 'Lost Cities FEATURES generation entered' server.log | cut -d: -f1)"
+          if [[ -z "$attach_line" || -z "$spawn_ready_line" || -z "$features_line" ]]               || (( attach_line >= spawn_ready_line )) || (( features_line >= spawn_ready_line )); then
+            echo "The Lost Cities populator was not attached and invoked before spawn-area generation completed."
+            exit 1
+          fi
           test -f config/lostcities-server.toml || { echo "Lost Cities server TOML was not created."; exit 1; }
           test -f config/lostcities/profiles/default.json || { echo "Default Lost Cities profile JSON was not created."; exit 1; }
           if grep -E 'Error generating chunk|Failed to load Lost Cities|Could not load plugin|Failed to enable LostCitiesPaper' server.log; then
