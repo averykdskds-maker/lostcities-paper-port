@@ -1,0 +1,8 @@
+{
+  "dimx": 2,
+  "dimz": 1,
+  "buildings": [
+    [ "lcmt:highway/restaurant_main" ],
+    [ "lcmt:highway/restaurant_parking" ]
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "palette": [
+    {
+      "char": "E",
+      "block": "minecraft:lantern[hanging=true]",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "e",
+      "block": "minecraft:lantern[hanging=false]",
+      "damaged": "minecraft:iron_bars"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "palette": [
+    {
+      "char": "u",
+      "block": "minecraft:white_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "R",
+      "block": "minecraft:gray_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "r",
+      "block": "minecraft:red_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "k",
+      "block": "minecraft:black_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "I",
+      "block": "minecraft:polished_andesite",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "=",
+      "block": "minecraft:smooth_stone_slab[type=double]",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "p",
+      "block": "minecraft:light_blue_stained_glass_pane",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "w",
+      "blocks": [
+        {
+          "random": 80,
+          "block": "minecraft:andesite_wall"
+        },
+        {
+          "random": 10,
+          "block": "minecraft:mossy_stone_brick_wall"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:stone_brick_wall"
+        }
+      ],
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "U",
+      "block": "minecraft:iron_door[facing=south,half=upper,hinge=left,open=false,powered=false]"
+    },
+    {
+      "char": "o",
+      "block": "minecraft:stone_button[face=wall,facing=west,powered=false]"
+    },
+    {
+      "char": "s",
+      "block": "minecraft:iron_door[facing=south,half=lower,hinge=right,open=false,powered=false]"
+    },
+    {
+      "char": ",",
+      "block": "minecraft:lever[face=wall,facing=north,powered=true]"
+    },
+    {
+      "char": "q",
+      "block": "minecraft:stone_button[face=wall,facing=east,powered=false]"
+    },
+    {
+      "char": "P",
+      "block": "minecraft:iron_door[facing=south,half=upper,hinge=right,open=false,powered=false]"
+    },
+    {
+      "char": "H",
+      "block": "minecraft:iron_door[facing=south,half=lower,hinge=left,open=false,powered=false]"
+    },
+    {
+      "char": "∴",
+      "block": "minecraft:cauldron"
+    },
+    {
+      "char": "Γ",
+      "block": "minecraft:stone_pressure_plate[powered=false]"
+    },
+    {
+      "char": "⑤",
+      "block": "minecraft:brown_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "⑦",
+      "block": "minecraft:orange_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "⑧",
+      "block": "minecraft:yellow_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "⑨",
+      "block": "minecraft:lime_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "⑩",
+      "block": "minecraft:green_concrete",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "⑫",
+      "block": "minecraft:light_blue_concrete",
+      "damaged": "minecraft:iron_bars"
+    }
+  ]
+}

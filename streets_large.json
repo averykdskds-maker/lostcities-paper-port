@@ -1,0 +1,155 @@
+{
+  "palette": [
+    {
+      "char": "S",
+      "blocks": [
+        {
+          "random": 30,
+          "block": "minecraft:polished_deepslate"
+        },
+        {
+          "random": 60,
+          "block": "minecraft:deepslate"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:cobbled_deepslate"
+        }
+      ],
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "s",
+      "blocks": [
+        {
+          "random": 32,
+          "block": "minecraft:polished_deepslate_slab[type=bottom]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:cobbled_deepslate_slab[type=bottom]"
+        }
+      ],
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "O",
+      "variant": "lcmt:small_street_bricks",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "T",
+      "blocks": [
+        {
+          "random": 64,
+          "block": "minecraft:stone_brick_wall"
+        },
+        {
+          "random": 32,
+          "block": "minecraft:mossy_stone_brick_wall"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:andesite_wall"
+        }
+      ],
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "A",
+      "blocks": [
+        {
+          "random": 32,
+          "block": "minecraft:polished_andesite"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:smooth_stone_slab[type=double]"
+        }
+      ],
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "a",
+      "blocks": [
+        {
+          "random": 32,
+          "block": "minecraft:polished_andesite_slab[type=bottom]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:smooth_stone_slab[type=bottom]"
+        }
+      ]
+    },
+    {
+      "char": "B",
+      "blocks": [
+        {
+          "random": 96,
+          "block": "minecraft:polished_andesite"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:andesite"
+        }
+      ],
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "b",
+      "blocks": [
+        {
+          "random": 96,
+          "block": "minecraft:polished_andesite_slab[type=bottom]"
+        },
+        {
+          "random": 10000,
+          "block": "minecraft:andesite_slab[type=bottom]"
+        }
+      ]
+    },
+    {
+      "char": "j",
+      "blocks": [
+        {
+          "random": 40,
+          "block": "minecraft:stone_brick_wall"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:andesite_wall"
+        }
+      ],
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "P",
+      "block": "minecraft:smooth_stone_slab[type=top]"
+    },
+    {
+      "char": "Q",
+      "block": "minecraft:iron_trapdoor[facing=south,half=bottom,open=false,powered=false]"
+    },
+    {
+      "char": "V",
+      "block": "minecraft:white_concrete_powder",
+      "damaged": "minecraft:iron_bars"
+    },
+    {
+      "char": "k",
+      "variant": "lcmt:stone_brick_stairs_bottom_east",
+      "damaged": "minecraft:cobblestone_slab[type=bottom,waterlogged=false]"
+    },
+    {
+      "char": "m",
+      "variant": "lcmt:stone_brick_stairs_bottom_south",
+      "damaged": "minecraft:cobblestone_slab[type=bottom,waterlogged=false]"
+    },
+    {
+      "char": "n",
+      "variant": "lcmt:stone_brick_stairs_bottom_north",
+      "damaged": "minecraft:cobblestone_slab[type=bottom,waterlogged=false]"
+    }
+  ]
+}
