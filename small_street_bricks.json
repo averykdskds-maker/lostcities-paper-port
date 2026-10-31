@@ -1,0 +1,16 @@
+{
+  "blocks": [
+    {
+      "random": 40,
+      "block": "minecraft:polished_granite"
+    },
+    {
+      "random": 40,
+      "block": "minecraft:granite"
+    },
+    {
+      "random": 1000,
+      "block": "minecraft:bricks"
+    }
+  ]
+}

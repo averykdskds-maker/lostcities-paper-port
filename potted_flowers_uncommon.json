@@ -1,8 +1,24 @@
 {
-  "palette": [
+  "blocks": [
     {
-      "char": "*",
-      "variant": "lcmt:potted_flowers_uncommon"
+      "random": 25,
+      "block": "minecraft:potted_blue_orchid"
+    },
+    {
+      "random": 30,
+      "block": "minecraft:potted_allium"
+    },
+    {
+      "random": 25,
+      "block": "minecraft:potted_lily_of_the_valley"
+    },
+    {
+      "random": 25,
+      "block": "minecraft:potted_golden_dandelion"
+    },
+    {
+      "random": 1000,
+      "block": "minecraft:flower_pot"
     }
   ]
 }

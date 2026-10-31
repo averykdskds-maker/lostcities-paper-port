@@ -1,8 +1,16 @@
 {
-  "palette": [
+  "blocks": [
     {
-      "char": "*",
-      "variant": "lcmt:potted_mushrooms"
+      "random": 50,
+      "block": "minecraft:potted_red_mushroom"
+    },
+    {
+      "random": 50,
+      "block": "minecraft:potted_brown_mushroom"
+    },
+    {
+      "random": 1000,
+      "block": "minecraft:flower_pot"
     }
   ]
 }

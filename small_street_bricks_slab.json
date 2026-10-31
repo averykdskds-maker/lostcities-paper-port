@@ -1,0 +1,16 @@
+{
+  "blocks": [
+    {
+      "random": 40,
+      "block": "minecraft:polished_granite_slab[type=bottom,waterlogged=false]"
+    },
+    {
+      "random": 40,
+      "block": "minecraft:granite_slab[type=bottom,waterlogged=false]"
+    },
+    {
+      "random": 1000,
+      "block": "minecraft:brick_slab[type=bottom,waterlogged=false]"
+    }
+  ]
+}

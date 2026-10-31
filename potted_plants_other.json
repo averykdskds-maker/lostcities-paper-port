@@ -1,8 +1,24 @@
 {
-  "palette": [
+  "blocks": [
     {
-      "char": "*",
-      "variant": "lcmt:potted_plants_other"
+      "random": 40,
+      "block": "minecraft:potted_fern"
+    },
+    {
+      "random": 30,
+      "block": "minecraft:potted_bamboo"
+    },
+    {
+      "random": 30,
+      "block": "minecraft:potted_azalea_bush"
+    },
+    {
+      "random": 20,
+      "block": "minecraft:potted_flowering_azalea_bush"
+    },
+    {
+      "random": 1000,
+      "block": "minecraft:flower_pot"
     }
   ]
 }

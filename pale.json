@@ -1,41 +1,172 @@
 {
-  "palette": [
-    {
-      "char": "♠",
-      "blocks": [
-        {
-          "random": 64,
-          "block": "minecraft:closed_eyeblossom"
-        },
-        {
-          "random": 1000,
-          "block": "minecraft:open_eyeblossom"
-        }
-      ],
-      "damaged": "minecraft:dead_bush"
-    },
-    {
-      "char": "♣",
-      "block": "minecraft:pale_oak_sapling[stage=1]",
-      "damaged": "minecraft:dead_bush"
-    },
-    {
-      "char": "♦",
-      "blocks": [
-        {
-          "random": 40,
-          "block": "minecraft:closed_eyeblossom"
-        },
-        {
-          "random": 40,
-          "block": "minecraft:open_eyeblossom"
-        },
-        {
-          "random": 1000,
-          "block": "minecraft:pale_oak_sapling[stage=1]"
-        }
-      ],
-      "damaged": "minecraft:dead_bush"
-    }
+  "randompalettes": [
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:common"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:default"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:building_base/bricks_standard"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:building_base/bricks_cyan"
+      },
+      {
+        "factor": 0.2,
+        "palette": "lcmt:building_base/concrete_white"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:building_base/concrete_light_gray"
+      },
+      {
+        "factor": 0.5,
+        "palette": "lcmt:building_base/bricks_deepslate"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:building_base/bricks_stone_andesite"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_full"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_pane"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_full_white"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_pane_white"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_full_gray"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_pane_gray"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_side_variant_glass"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_side_variant_glass"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_side_variant_bricks"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:glass/glass_side_variant_quartz"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:lanterns"
+      },
+      {
+        "factor": 0.01,
+        "palette": "lcmt:soul_lanterns"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:flower_pot/potted_plants_pale"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:furniture/wooden_furniture_pale_oak"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:workstation/workstations_default"
+      },
+      {
+        "factor": 0.5,
+        "palette": "lcmt:workstation/workstations_default_rubble"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:workstation/workstations_blacksmith"
+      },
+      {
+        "factor": 1.0,
+        "palette": "lcmt:workstation/workstations_cook"
+      },
+      {
+        "factor": 0.8,
+        "palette": "lcmt:workstation/workstations_librarian"
+      },
+      {
+        "factor": 0.5,
+        "palette": "lcmt:workstation/workstations_musician"
+      },
+      {
+        "factor": 0.8,
+        "palette": "lcmt:workstation/workstations_architect"
+      },
+      {
+        "factor": 0.8,
+        "palette": "lcmt:workstation/workstations_apothecary"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:stuff/extra_stuff_pale"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:rubble/rubble_pale_moss"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:leaf/pale_oak_leaves"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:banner/wall_banners_white_simple"
+      }
+    ],
+    [
+      {
+        "factor": 1.0,
+        "palette": "lcmt:random_flower_and_sapling/pale"
+      }
+    ]
   ]
 }

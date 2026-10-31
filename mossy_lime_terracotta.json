@@ -1,24 +1,16 @@
 {
-  "palette": [
+  "blocks": [
     {
-      "char": "X",
-      "block": "minecraft:lime_terracotta",
-      "damaged": "minecraft:iron_bars"
+      "random": 32,
+      "block": "minecraft:moss_block"
     },
     {
-      "char": "$",
-      "block": "minecraft:green_terracotta",
-      "damaged": "minecraft:iron_bars"
+      "random": 8,
+      "block": "minecraft:green_concrete"
     },
     {
-      "char": "#",
-      "variant": "lcmt:mossy_lime_terracotta",
-      "damaged": "minecraft:iron_bars"
-    },
-    {
-      "char": "}",
-      "variant": "lcmt:mossy_lime_terracotta",
-      "damaged": "minecraft:iron_bars"
+      "random": 1000,
+      "block": "minecraft:lime_terracotta"
     }
   ]
 }

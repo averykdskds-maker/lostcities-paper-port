@@ -1,0 +1,12 @@
+{
+  "blocks": [
+    {
+      "random": 48,
+      "block": "minecraft:waxed_exposed_copper_bars"
+    },
+    {
+      "random": 1000,
+      "block": "minecraft:iron_bars"
+    }
+  ]
+}
