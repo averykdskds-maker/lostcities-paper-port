@@ -1,0 +1,50 @@
+name: Fetch upstream Lost Cities source
+
+on:
+  push:
+    branches: [lostcities-paper-26.3]
+    paths:
+      - '.github/workflows/fetch-upstream-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Paper port
+        uses: actions/checkout@v4
+      - name: Clone official Lost Cities 26.3 source
+        run: |
+          git clone --depth 1 --branch 26.3_neo https://github.com/McJtyMods/LostCities.git upstream/LostCities
+      - name: Audit upstream dependencies and collect source/assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audit
+          find upstream/LostCities/src/main/java -name '*.java' -print0 \
+            | xargs -0 grep -hE '^import (net\.neoforged|net\.minecraft|com\.mojang)' \
+            | sort -u > audit/upstream-imports.txt
+          find upstream/LostCities/src/main/java -name '*.java' | wc -l > audit/java-file-count.txt
+          find upstream/LostCities/src/main/resources/data -type f -name '*.json' | wc -l > audit/base-json-count.txt
+          jar tf LostCities-26.3-12.0.0.jar > audit/base-jar-files.txt
+          unzip -Z1 lostcities-modern-tweaks-v6.0.0.zip > audit/modern-tweaks-files.txt
+          cp LostCities-26.3-12.0.0.jar upstream/
+          cp lostcities-modern-tweaks-v6.0.0.zip upstream/
+          tar -czf upstream-lostcities-26.3-src.tar.gz -C upstream LostCities
+      - name: Upload upstream source snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: lostcities-upstream-26.3-source
+          path: |
+            upstream-lostcities-26.3-src.tar.gz
+            upstream/LostCities/LICENSE
+            upstream/LostCities/src/main/java/
+            upstream/LostCities/src/main/resources/data/lostcities/
+            upstream/LostCities/src/main/resources/assets/lostcities/
+            audit/
+            LostCities-26.3-12.0.0.jar
+            lostcities-modern-tweaks-v6.0.0.zip
+          retention-days: 7
