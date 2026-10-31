@@ -101,13 +101,12 @@ public final class AssetPack {
         return selected == null ? "lcmt:building1" : selected;
     }
 
-    public String chooseStreet(boolean intersection, Random random) {
+    public String chooseStreet(String type, Random random) {
         if (commonCityStyle == null) {
             return "lcmt:street/street_straight_base";
         }
         JsonObject streetBlocks = commonCityStyle.getAsJsonObject("streetblocks");
         JsonObject parts = streetBlocks == null ? null : streetBlocks.getAsJsonObject("parts");
-        String type = intersection ? "all" : "straight";
         JsonArray values = parts == null ? null : parts.getAsJsonArray(type);
         if (values == null || values.isEmpty()) {
             values = parts == null ? null : parts.getAsJsonArray("straight");
