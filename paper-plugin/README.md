@@ -1,75 +1,65 @@
 # Rotbound
 
-**The Forgotten Earth** — a server-side survival project for Paper 26.3 / Java 25.
+**The Forgotten Earth** — server-side survival for Paper 26.3 / Java 25. Vanilla clients only; no client mods are required.
 
-Rotbound is designed for ordinary vanilla Minecraft clients. No Fabric, Forge, NeoForge or client-side mods are required. Optional server resource packs may be considered later, but the project must remain playable without one.
+## What the current alpha generates
 
-## Project direction
+- Procedural country-like regions (about 1,024 km square) with generated names and architectural styles. These are not real-world country borders.
+- Multiple settlements per 16 km region: metropolitan areas, cities, towns, suburbs, villages, rural settlements, industrial zones, military installations, airports and ports.
+- Larger and more frequent settlement footprints than the earliest prototype, with irregular boundaries and connected road patterns derived from the same world seed.
+- Initial ruined building shells, airport runway sections, occasional military details and abandoned ship hulls in ocean biomes.
+- /rotbound locate city to find the nearest planned metro/city/town; /rotbound locate country for the procedural region name.
 
-The world is Earth roughly 50–100 years after humanity disappeared. It is not a conventional wasteland: nature has reclaimed settlements at different rates depending on biome, elevation, climate and proximity to water. The intended atmosphere is quiet, abandoned and unexplained.
+The structures are an early procedural placeholder set, not yet detailed buildings such as complete hospitals, police stations, schools, shopping districts, factories or ship interiors.
 
-Core design requirements:
+## Enable it in your normal Overworld
 
-- The normal Overworld is the intended playable world; a separate city dimension is not the end goal.
-- Natural terrain, rivers, lakes and coastlines remain the foundation.
-- Human infrastructure is fragmented, damaged, flooded, buried or reclaimed by vegetation.
-- City planning must be continuous and planned across chunks, not a repeating circular grid of independent building chunks.
-- Reclamation and structure condition must account for biome and elevation.
-- Mystery props are rare and unexplained.
-- Wildlife is wild and appropriate to its environment; no active farms or human civilization.
-- Loot is location-specific, scarce and non-refilling. Exceptional equipment must be rare.
-- Weapons are server-authoritative and identified by Persistent Data Container tags, not display names alone.
-- Decorative heads and display entities may be used for visuals; physical collision must be provided separately where needed.
+**Back up your server first.** Rotbound only affects chunks generated after it is configured. It does not convert chunks that are already saved.
 
-## Current foundation
+1. Stop the server.
+2. Open the server's bukkit.yml.
+3. Find its existing worlds: section. Add or merge this entry under it:
 
-Implemented in this build:
+    worlds:
+      world:
+        generator: Rotbound
 
-- Rotbound plugin identity and main entry point.
-- /rotbound command framework.
-- Server-side tagged weapon items and ammunition consumption.
-- Initial mechanics for pistol, rifle, shotgun, flamethrower, grenade, SMG, railgun, tear gas, mortar, sniper and minigun.
-- Configurable weapon cooldowns and selected weapon parameters.
-- Minigun toggle-fire mode, ammunition use and heat/cooling.
+Do not overwrite other settings in bukkit.yml. If your Overworld folder is named something other than world, use that exact name.
+4. Start the server.
+5. Check plugins/Rotbound/config.yml: systems.world-generation should be true, and world.target-world should match your Overworld name.
+6. Travel beyond the edge of previously generated chunks, or use a fresh world for a clean test.
 
-Not yet implemented:
+The previous foundation alpha stored world generation as disabled. The current build migrates an older Rotbound config once and enables it; after migration, your own config setting is respected.
 
-- The Forgotten Earth terrain and city planner.
-- Normal Overworld generator integration.
-- Biome/elevation-aware reclamation.
-- Ruined structure library and multi-chunk building placement.
-- Structure-specific loot population and anti-refill protection.
-- Wildlife distribution and environmental storytelling.
-- Custom decorative-head catalogue and display-entity system.
-- Weapon balancing on a live server, advanced projectile/penetration behaviour, weapon durability and complete PvP/PvE rules.
+## Find settlements
 
-**Important:** World generation, reclamation, structures, loot and wildlife are disabled in this foundation build. This prevents the old experimental circular city-grid generator from being mistaken for the intended Rotbound world.
+- /rotbound locate city — nearest planned metropolitan area, city or town.
+- /rotbound locate country — current procedural country-like region.
 
-## Build
+These commands are operator-only by default. A locate result gives the deterministic plan coordinates; chunks are generated when explored. If the nearest settlement is tens of thousands of blocks away, the larger region scale is intentional.
 
-The GitHub Actions workflow builds with Temurin Java 25 and Gradle 9.2.1.
+## Weapons
 
-For a local build, run from this directory:
+Use these commands for testing:
 
-    gradle --no-daemon clean build
-
-Output: build/libs/Rotbound-0.1.0-alpha1.jar
-
-## Install and test weapons
-
-1. Put the built JAR in the Paper server's plugins directory.
-2. Start Paper 26.3 with Java 25.
-3. Run /rotbound weapons to list weapon IDs.
-4. As an operator, give a test weapon with /rotbound weapon give <player> <weapon-id>.
-5. Give ammunition with /rotbound ammo give <player> <material> [amount].
-
-Example:
-
+    /rotbound weapons
     /rotbound weapon give PlayerName pistol
     /rotbound ammo give PlayerName gunpowder 32
 
 Weapon IDs: pistol, rifle, shotgun, flamethrower, grenade, smg, railgun, tear_gas, mortar, sniper, minigun.
 
-The minigun currently uses toggle firing: right-click once to start and again to stop. It fires two snowballs per four ticks (about 10 projectiles per second), consumes one gunpowder per volley and accumulates heat.
+- Pistol, rifle, shotgun, SMG, railgun, sniper and minigun use visible arrow projectiles.
+- Grenades use a real Ender Pearl projectile, with vanilla gravity and block collision, but no player teleport.
+- Tear gas uses a potion-looking throwable with gravity.
+- Flamethrower uses a small fireball.
+- Mortar uses a primed TNT entity, follows an arc and is set to detonate when it lands.
+- Creative-mode players have infinite ammunition; Survival and Adventure players consume ammo.
+- Grenade and mortar blasts do not break blocks.
 
-This is an early development foundation. Test on a disposable world before allowing players to use it on a live server. Explosive, railgun, projectile and damage behaviour still needs multiplayer testing and balancing.
+The minigun uses toggle fire because vanilla server events do not provide reliable continuous right-mouse hold state. It fires two projectiles every four ticks (about 10 rounds/sec), using one gunpowder per volley and the configured heat/cooling system.
+
+## Current limitations
+
+This is a generator foundation, not a map-accurate Earth simulation. Country-like regions are generated procedurally; they do not reproduce actual national borders or city coordinates. The alpha does not yet include a full multi-chunk city master planner, continuous long-distance highways, rail networks, complete airports/ports/ships, dams, bridges, detailed public buildings, sophisticated biome/elevation reclamation, wildlife replacement, environmental mystery placements or structure-specific loot tables.
+
+The normal Overworld generator is enabled only when the Paper/Bukkit world generator is configured. Existing chunks are preserved. Test on a disposable world before deploying to your live multiplayer map.
