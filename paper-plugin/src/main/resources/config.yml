@@ -1,79 +1,44 @@
 # Rotbound — The Forgotten Earth
 systems:
   weapons: true
-  world-generation: false
+  world-generation: true
   reclamation: false
-  structures: false
+  structures: true
   loot: false
   wildlife: false
   environmental-storytelling: false
-
 world:
   target-world: world
-  generation-mode: disabled
+  sea-level: 63
+  structure-density: 0.90
   preserve-existing-chunks: true
-
+settlements:
+  region-size-blocks: 4096
+  locate-search-regions: 5
 reclamation:
   terrain-adaptation: true
   biome-aware-vegetation: true
   coastal-inundation: true
   remove-active-lights: true
-
+ships:
+  abandoned-ship-chance-per-ocean-region: 0.10
+  ocean-region-size-blocks: 2048
 loot:
   container-refill: false
   guarantee-valuable-items: false
   rare-discovery-multiplier: 1.0
-  tables:
-    suburban-house:
-      everyday: 0.80
-      salvage: 0.18
-      valuable: 0.02
-    police-station:
-      everyday: 0.55
-      salvage: 0.38
-      valuable: 0.07
-    military-facility:
-      everyday: 0.35
-      salvage: 0.50
-      valuable: 0.14
-      exceptional: 0.01
-    laboratory:
-      everyday: 0.45
-      salvage: 0.38
-      valuable: 0.15
-      exceptional: 0.02
-
 weapons:
-  pistol:
-    cooldown-ms: 350
-  rifle:
-    cooldown-ms: 650
-  shotgun:
-    cooldown-ms: 900
-    pellets: 6
-  flamethrower:
-    cooldown-ms: 250
-  grenade:
-    cooldown-ms: 1200
-    damage: 8.0
-    radius: 4.0
-  smg:
-    cooldown-ms: 500
-  railgun:
-    cooldown-ms: 1800
-    splash-radius: 2.0
-  tear_gas:
-    cooldown-ms: 1800
-    radius: 6.0
-    duration-ticks: 160
-  mortar:
-    cooldown-ms: 2500
-    fuse-ticks: 80
-    yield: 4.0
-  sniper:
-    cooldown-ms: 10000
+  pistol: { cooldown-ms: 350 }
+  rifle: { cooldown-ms: 650 }
+  shotgun: { cooldown-ms: 900, pellets: 6 }
+  flamethrower: { cooldown-ms: 250 }
+  grenade: { cooldown-ms: 1200, damage: 8.0, radius: 4.0 }
+  smg: { cooldown-ms: 500 }
+  railgun: { cooldown-ms: 1800, splash-radius: 2.0 }
+  tear_gas: { cooldown-ms: 1800, radius: 6.0, duration-ticks: 160 }
+  mortar: { cooldown-ms: 2500, fuse-ticks: 600, yield: 4.0 }
+  sniper: { cooldown-ms: 10000 }
   minigun:
-    # Two snowballs every four ticks = about 10 projectiles per second.
     interval-ticks: 4
     projectiles-per-volley: 2
     heat-per-volley: 5
