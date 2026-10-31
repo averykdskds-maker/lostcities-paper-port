@@ -1,4 +1,3 @@
 # Paper-facing bootstrap settings. Detailed Lost Cities settings live in config/lostcities-server.toml.
 enabled: true
 target-world: world
-profile: ""

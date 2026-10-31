@@ -105,6 +105,57 @@ public final class Config {
         }
     }
 
+    public static synchronized void setSelectedProfile(String profileName) {
+        SELECTED_PROFILE.set(profileName);
+        SELECTED_CUSTOM_JSON.set("");
+        if (configFile == null || Files.notExists(configFile)) {
+            resetProfileCache();
+            return;
+        }
+        try {
+            List<String> lines = new ArrayList<>(Files.readAllLines(configFile));
+            boolean inProfiles = false;
+            int profilesHeader = -1;
+            int selectedProfileLine = -1;
+            int selectedJsonLine = -1;
+            String escaped = profileName.replace("\\", "\\\\").replace("\"", "\\\"");
+            for (int i = 0; i < lines.size(); i++) {
+                String trimmed = lines.get(i).trim();
+                if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+                    inProfiles = trimmed.equals("[profiles]");
+                    if (inProfiles) profilesHeader = i;
+                    continue;
+                }
+                if (!inProfiles) continue;
+                if (trimmed.startsWith("selectedProfile") && trimmed.contains("=")) selectedProfileLine = i;
+                if (trimmed.startsWith("selectedCustomJson") && trimmed.contains("=")) selectedJsonLine = i;
+            }
+
+            if (selectedProfileLine >= 0) lines.set(selectedProfileLine, "selectedProfile = \"" + escaped + "\"");
+            if (selectedJsonLine >= 0) lines.set(selectedJsonLine, "selectedCustomJson = \"\"");
+
+            if (selectedProfileLine < 0 || selectedJsonLine < 0) {
+                if (profilesHeader < 0) {
+                    lines.add("");
+                    lines.add("[profiles]");
+                    profilesHeader = lines.size() - 1;
+                }
+                int insertAt = profilesHeader + 1;
+                if (selectedProfileLine < 0) {
+                    lines.add(insertAt++, "selectedProfile = \"" + escaped + "\"");
+                }
+                if (selectedJsonLine < 0) {
+                    lines.add(insertAt, "selectedCustomJson = \"\"");
+                }
+            }
+
+            Files.write(configFile, lines);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not save active profile to " + configFile, e);
+        }
+        resetProfileCache();
+    }
+
     public static Path getConfigFile() {
         return configFile;
     }
