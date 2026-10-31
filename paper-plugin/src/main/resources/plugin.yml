@@ -1,16 +1,19 @@
-name: LostCitiesPaper
+name: Rotbound
 version: ${version}
-main: dev.rotbound.lostcitiespaper.LostCitiesPaperPlugin
+main: dev.rotbound.RotboundPlugin
 api-version: '26.3'
-author: RotBound
-description: Native Paper world generator using Lost Cities and Modern Tweaks assets.
+author: Rotbound
+description: Server-side survival, reclamation, structures, loot and weapons for the Forgotten Earth.
 commands:
-  lostcities:
-    description: Create and manage Lost Cities worlds.
-    usage: /lostcities <create|help> [world]
-    aliases: [lc]
-    permission: lostcitiespaper.admin
+  rotbound:
+    description: Rotbound administration and testing commands.
+    usage: /rotbound <help|info|weapons|weapon|ammo|reload>
+    aliases: [rb]
+    permission: rotbound.admin
 permissions:
-  lostcitiespaper.admin:
-    description: Allows creating Lost Cities worlds.
+  rotbound.admin:
+    description: Allows administration and testing of Rotbound.
     default: op
+  rotbound.weapons.use:
+    description: Allows use of Rotbound weapons.
+    default: true
