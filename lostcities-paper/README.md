@@ -26,8 +26,7 @@ The port adapts the mod-loader bootstrap, configuration access, asset registry l
 1. Stop the Paper server.
 2. Put `LostCitiesPaper-0.1.0-alpha1.jar` in the server's `plugins/` directory.
 3. Start the server once. The plugin creates `plugins/LostCitiesPaper/config.yml`, `config/lostcities-server.toml` and the profile JSONs under `config/lostcities/profiles/`.
-4. Restart the server after the first boot so the embedded datapack can be discovered and enabled during Paper's datapack discovery phase.
-5. Check `/datapack list enabled` and confirm the plugin-provided Lost Cities pack is enabled.
+4. The bootstrapper registers the embedded datapack during Paper's datapack-discovery phase; it is automatically enabled on startup. Confirm it with `/datapack list enabled`.
 
 No `bukkit.yml` generator entry is required. The plugin attaches its populator to the world selected by `target-world` in `plugins/LostCitiesPaper/config.yml`.
 
