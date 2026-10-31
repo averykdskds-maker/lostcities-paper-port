@@ -232,10 +232,15 @@ public final class WeaponService implements Listener {
     }
 
     private Arrow shootArrow(Player player, WeaponType type, double damage, double velocity) {
+        return shootArrow(player, type, damage, velocity, player.getEyeLocation().getDirection());
+    }
+
+    private Arrow shootArrow(Player player, WeaponType type, double damage, double velocity, Vector direction) {
         Arrow arrow = player.getWorld().spawn(player.getEyeLocation(), Arrow.class);
         arrow.setShooter(player);
-        arrow.setVelocity(player.getEyeLocation().getDirection().normalize().multiply(velocity));
+        arrow.setVelocity(direction.clone().normalize().multiply(velocity));
         arrow.setDamage(damage);
+        arrow.setCritical(false);
         arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
         arrow.setSilent(true);
         projectileData.put(arrow.getUniqueId(), new ShotData(player.getUniqueId(), type, damage));
