@@ -43,7 +43,17 @@ jobs:
         run: |
           set -euo pipefail
           smoke="$RUNNER_TEMP/paper-smoke"
-          mkdir -p "$smoke/plugins"
+          mkdir -p "$smoke/plugins" "$GITHUB_WORKSPACE/smoke-artifact"
+          dump_smoke_log() {
+            status=$?
+            if [[ -f "$smoke/server.log" ]]; then
+              cp "$smoke/server.log" "$GITHUB_WORKSPACE/smoke-artifact/server.log"
+              echo "---- Paper smoke-test server log (last 250 lines) ----"
+              tail -n 250 "$smoke/server.log"
+            fi
+            return "$status"
+          }
+          trap dump_smoke_log EXIT
           cp lostcities-paper/build/libs/LostCitiesPaper-0.1.0-alpha1.jar "$smoke/plugins/"
           printf 'eula=true\n' > "$smoke/eula.txt"
           cat > "$smoke/server.properties" <<'PROPS'
@@ -102,11 +112,11 @@ jobs:
           exec 3>&-
           wait "$server_pid"
 
-          grep -q 'Lost Cities Paper port enabled' server.log
-          grep -q 'Attached original Lost Cities generation to world' server.log
-          grep -q 'Lost Cities FEATURES generation entered' server.log
-          test -f config/lostcities-server.toml
-          test -f config/lostcities/profiles/default.json
+          grep -q 'Lost Cities Paper port enabled' server.log || { echo "Plugin main class did not finish enabling."; exit 1; }
+          grep -q 'Attached original Lost Cities generation to world' server.log || { echo "Lost Cities populator did not attach to the target world."; exit 1; }
+          grep -q 'Lost Cities FEATURES generation entered' server.log || { echo "The forced chunk did not enter the Lost Cities FEATURES callback."; exit 1; }
+          test -f config/lostcities-server.toml || { echo "Lost Cities server TOML was not created."; exit 1; }
+          test -f config/lostcities/profiles/default.json || { echo "Default Lost Cities profile JSON was not created."; exit 1; }
           if grep -E 'Error generating chunk|Failed to load Lost Cities|Could not load plugin|Failed to enable LostCitiesPaper' server.log; then
             echo "Lost Cities runtime smoke test emitted a generation/plugin error."
             exit 1
