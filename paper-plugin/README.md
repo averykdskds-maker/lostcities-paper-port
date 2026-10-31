@@ -1,42 +1,75 @@
-# LostCitiesPaper (early port)
+# Rotbound
 
-Native Paper plugin project targeting Minecraft 26.3 / Java 25. It embeds and reads the Modern Tweaks datapack archive from the parent repository.
+**The Forgotten Earth** — a server-side survival project for Paper 26.3 / Java 25.
+
+Rotbound is designed for ordinary vanilla Minecraft clients. No Fabric, Forge, NeoForge or client-side mods are required. Optional server resource packs may be considered later, but the project must remain playable without one.
+
+## Project direction
+
+The world is Earth roughly 50–100 years after humanity disappeared. It is not a conventional wasteland: nature has reclaimed settlements at different rates depending on biome, elevation, climate and proximity to water. The intended atmosphere is quiet, abandoned and unexplained.
+
+Core design requirements:
+
+- The normal Overworld is the intended playable world; a separate city dimension is not the end goal.
+- Natural terrain, rivers, lakes and coastlines remain the foundation.
+- Human infrastructure is fragmented, damaged, flooded, buried or reclaimed by vegetation.
+- City planning must be continuous and planned across chunks, not a repeating circular grid of independent building chunks.
+- Reclamation and structure condition must account for biome and elevation.
+- Mystery props are rare and unexplained.
+- Wildlife is wild and appropriate to its environment; no active farms or human civilization.
+- Loot is location-specific, scarce and non-refilling. Exceptional equipment must be rare.
+- Weapons are server-authoritative and identified by Persistent Data Container tags, not display names alone.
+- Decorative heads and display entities may be used for visuals; physical collision must be provided separately where needed.
+
+## Current foundation
+
+Implemented in this build:
+
+- Rotbound plugin identity and main entry point.
+- /rotbound command framework.
+- Server-side tagged weapon items and ammunition consumption.
+- Initial mechanics for pistol, rifle, shotgun, flamethrower, grenade, SMG, railgun, tear gas, mortar, sniper and minigun.
+- Configurable weapon cooldowns and selected weapon parameters.
+- Minigun toggle-fire mode, ammunition use and heat/cooling.
+
+Not yet implemented:
+
+- The Forgotten Earth terrain and city planner.
+- Normal Overworld generator integration.
+- Biome/elevation-aware reclamation.
+- Ruined structure library and multi-chunk building placement.
+- Structure-specific loot population and anti-refill protection.
+- Wildlife distribution and environmental storytelling.
+- Custom decorative-head catalogue and display-entity system.
+- Weapon balancing on a live server, advanced projectile/penetration behaviour, weapon durability and complete PvP/PvE rules.
+
+**Important:** World generation, reclamation, structures, loot and wildlife are disabled in this foundation build. This prevents the old experimental circular city-grid generator from being mistaken for the intended Rotbound world.
 
 ## Build
 
-The GitHub Actions workflow builds the plugin with JDK 25 and Gradle 9.2.1. The output JAR is named `LostCitiesPaper-0.1.0-alpha1.jar`.
+The GitHub Actions workflow builds with Temurin Java 25 and Gradle 9.2.1.
 
-To build locally, run Gradle 9.2.1 with JDK 25 from this folder:
+For a local build, run from this directory:
 
-```bash
-gradle clean build
-```
+    gradle --no-daemon clean build
 
-The build expects `../lostcities-modern-tweaks-v6.0.0.zip` to exist. It embeds that ZIP as `modern-tweaks.zip` inside the plugin JAR.
+Output: build/libs/Rotbound-0.1.0-alpha1.jar
 
-## Install and create a world
+## Install and test weapons
 
-1. Put the built JAR in the Paper server's `plugins` folder.
-2. Restart Paper.
-3. Run `/lostcities create rotbound_city` (or another unused world name).
-4. Teleport to the generated world and explore.
+1. Put the built JAR in the Paper server's plugins directory.
+2. Start Paper 26.3 with Java 25.
+3. Run /rotbound weapons to list weapon IDs.
+4. As an operator, give a test weapon with /rotbound weapon give <player> <weapon-id>.
+5. Give ammunition with /rotbound ammo give <player> <material> [amount].
 
-Worlds are never overwritten. This creates a separate world with its own generator. Existing worlds and already-generated chunks are not retrofitted.
+Example:
 
-Configuration is in `plugins/LostCitiesPaper/config.yml`. Changes apply to worlds created after the next restart/reload of the plugin; do not use PlugMan to reload a live world generator.
+    /rotbound weapon give PlayerName pistol
+    /rotbound ammo give PlayerName gunpowder 32
 
-## Implemented in this alpha
+Weapon IDs: pistol, rifle, shotgun, flamethrower, grenade, smg, railgun, tear_gas, mortar, sniper, minigun.
 
-- Vanilla terrain generation outside city regions.
-- Deterministic city-region placement from the world seed.
-- Flattened urban plots at a configurable ground level.
-- Street chunks and intersections selected from Modern Tweaks' city-style selectors.
-- Building definitions, floor segments, and rooftop parts selected from Modern Tweaks JSON.
-- Palette JSON parsing, weighted block choices, palette references, and basic variant references.
-- City chunks suppress vanilla caves, decorations, and vanilla structures to prevent trees/villages generating through city buildings.
+The minigun currently uses toggle firing: right-click once to start and again to stop. It fires two snowballs per four ticks (about 10 projectiles per second), consumes one gunpowder per volley and accumulates heat.
 
-## Not yet a full Lost Cities port
-
-This is a first, testable generation foundation, not a feature-complete reimplementation of McJty's generator. In particular, the original intercity highway planner, railways/monorails, underground city/factory networks, city spheres, terrain profiles, explosions, loot-table/block-entity handling, mob spawners, detailed ruin/rubble rules, and full biome-aware style/condition system are not implemented yet. Some advanced palette metadata and variant behaviours are also not handled. Do not use this alpha as a replacement for the NeoForge mod on a production world.
-
-The original Lost Cities source is MIT licensed; this project keeps the original datapack's included licence in the embedded archive. The Modern Tweaks data remains in its supplied archive and is not modified.
+This is an early development foundation. Test on a disposable world before allowing players to use it on a live server. Explosive, railgun, projectile and damage behaviour still needs multiplayer testing and balancing.
