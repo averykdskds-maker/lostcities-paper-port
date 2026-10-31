@@ -8,7 +8,7 @@ from pathlib import Path
 
 REPLACED = {
     "LostCities.java", "LostCitiesImp.java", "api/LostCityEvent.java",
-    "setup/Config.java", "setup/ModSetup.java", "config/ProfileSetup.java",
+    "setup/Config.java", "setup/ModSetup.java",
     "worldgen/LostCityFeature.java", "worldgen/LostCitySphereFeature.java",
     "worldgen/lost/cityassets/AssetRegistries.java",
     "worldgen/lost/cityassets/RegistryAssetRegistry.java",
