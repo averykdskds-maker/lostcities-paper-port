@@ -1,0 +1,43 @@
+{
+  "xsize": 16,
+  "zsize": 16,
+  "refpalette": "lcmt:streets_large",
+  "slices": [
+    [
+      "AASVSVSVSVSVSVAA",
+      "AASVSVSVSVSVSVAA",
+      "VVSSSSSSSSSSSSSS",
+      "SSSSSSSSSSSSSSVV",
+      "VVSSSSSSSSSSSSSS",
+      "SSSSSSSSSSSSSSVV",
+      "VVSSSSSSSSSSSSSS",
+      "SSSSSSSSSSSSSSVV",
+      "VVSSSSSSSSSSSSSS",
+      "SSSSSSSSSSSSSSVV",
+      "VVSSSSSSSSSSSSSS",
+      "SSSSSSSSSSSSSSVV",
+      "VVSSSSSSSSSSSSSS",
+      "SSSSSSSSSSSSSSVV",
+      "AAAAAAAAAAAAAAAA",
+      "~~~~~~~~~~~~~~~~"
+    ],
+    [
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~",
+      "~~~~~~~~~~~~~~~~"
+    ]
+  ]
+}
