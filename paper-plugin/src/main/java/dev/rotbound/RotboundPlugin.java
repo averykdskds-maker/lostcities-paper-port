@@ -7,6 +7,16 @@ public final class RotboundPlugin extends JavaPlugin {
  private WeaponService weaponService;
  @Override public void onEnable() {
   saveDefaultConfig();
+  int configVersion=getConfig().getInt("config-version",0);
+  if(configVersion<2){
+   // Migrate the earlier foundation alpha, whose stored config disabled world generation.
+   // This runs once only; later manual enable/disable choices are preserved.
+   getConfig().set("systems.world-generation",true);
+   getConfig().set("world.target-world","world");
+   getConfig().set("config-version",2);
+   saveConfig();
+   getLogger().info("Migrated Rotbound config to v2 and enabled Overworld generation.");
+  }
   weaponService=new WeaponService(this);
   getServer().getPluginManager().registerEvents(weaponService,this);
   weaponService.startCoolingTask();
