@@ -44,6 +44,18 @@ def copy_upstream_sources(upstream: Path, destination: Path) -> None:
     text = text.replace("NeoForge.EVENT_BUS.post(event);", "LostCities.post(event);")
     building_info.write_text(text, encoding="utf-8")
 
+    # Preserve one legacy Lost Cities palette alias used by the original desert palette.
+    # Pre-flattening red_sandstone metadata value 2 represented smooth red sandstone.
+    tools_file = target / "varia/Tools.java"
+    body = tools_file.read_text(encoding="utf-8")
+    needle = "    public static BlockState stringToState(String s) {"
+    alias_block = """    public static BlockState stringToState(String s) {
+        if ("minecraft:red_sandstone@2".equals(s)) {
+            s = "minecraft:smooth_red_sandstone";
+        }"""
+    body = body.replace(needle, alias_block, 1)
+    tools_file.write_text(body, encoding="utf-8")
+
     # Minecraft 26.3 requires a DataFixTypes argument in SavedDataType.
     for relative in (
         "worldgen/LostCityHighwayData.java",
