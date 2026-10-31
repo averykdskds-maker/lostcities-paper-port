@@ -52,8 +52,12 @@ public final class LostCitiesCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        Path worldFolder = Bukkit.getWorldContainer().toPath().resolve(worldName).normalize();
-        if (!worldFolder.startsWith(Bukkit.getWorldContainer().toPath().normalize())) {
+        // Resolve both paths to absolute form before comparing. Bukkit may return a
+        // relative world container (for example "."), whose normalized Path is empty.
+        // Comparing a child against that relative path incorrectly rejects every name.
+        Path worldContainer = Bukkit.getWorldContainer().toPath().toAbsolutePath().normalize();
+        Path worldFolder = worldContainer.resolve(worldName).normalize();
+        if (!worldFolder.startsWith(worldContainer)) {
             sender.sendMessage("§cInvalid world path.");
             return true;
         }
