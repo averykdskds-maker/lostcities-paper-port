@@ -1,11 +1,10 @@
-name: Build LostCitiesPaper
+name: Build Rotbound
 
 on:
   workflow_dispatch:
   push:
     paths:
       - 'paper-plugin/**'
-      - 'lostcities-modern-tweaks-v6.0.0.zip'
       - '.github/workflows/build-paper-plugin.yml'
 
 permissions:
@@ -17,25 +16,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Java 25
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '25'
-
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.2.1'
-
       - name: Build plugin
         run: gradle --no-daemon -p paper-plugin clean build
-
-      - name: Upload plugin JAR
+      - name: Upload Rotbound JAR
         uses: actions/upload-artifact@v4
         with:
-          name: LostCitiesPaper-alpha1
-          path: paper-plugin/build/libs/LostCitiesPaper-0.1.0-alpha1.jar
+          name: Rotbound-foundation
+          path: paper-plugin/build/libs/Rotbound-0.1.0-alpha1.jar
           if-no-files-found: error
           retention-days: 30
