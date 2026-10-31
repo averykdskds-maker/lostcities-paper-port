@@ -1,6 +1,4 @@
-# Lost Cities Paper — server settings
-# Detailed generation settings and profiles are generated under config/lostcities/.
+# Paper-facing bootstrap settings. Detailed Lost Cities settings live in config/lostcities-server.toml.
 enabled: true
 target-world: world
-profile: default
-debug: false
+profile: ""
