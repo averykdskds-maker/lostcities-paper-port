@@ -1,0 +1,21 @@
+# LostCitiesPaper alpha configuration.
+# These settings apply only to worlds created with /lostcities create <name>.
+
+# Chance that a 768x768 region contains a city (1.0 = every region).
+city-chance: 1.0
+
+# Must be a multiple of 16. City centers are placed near each region's centre.
+city-region-blocks: 768
+city-center-jitter-blocks: 32
+city-radius-min-blocks: 176
+city-radius-max-blocks: 270
+
+# A street chunk is placed every N chunks on each city axis.
+street-spacing-chunks: 4
+
+# Flat urban ground level. Existing terrain is flattened only inside city chunks.
+ground-level: 71
+
+# Number of floor segments stacked in each generated building.
+building-floors-min: 2
+building-floors-max: 6
