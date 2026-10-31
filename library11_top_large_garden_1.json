@@ -1,0 +1,42 @@
+{
+  "xsize": 16,
+  "zsize": 16,
+  "slices": [
+    [
+      "################",
+      "#DDDDDDDDDDDDDD#",
+      "#DGGDDDDGDDDDDD#",
+      "#DDDGDDDDDDGDDD#",
+      "#DDDDDDDDDDGDDD#",
+      "#DDDGDDDDDGDDDD#",
+      "#DDDDGDDGDDDDDD#",
+      "#DDDGGDDDDDDGDD#",
+      "#DDDGDDDDGDDDDD#",
+      "#DDDDDDDDGGDDDD#",
+      "#DDDDGDDDDDDGDD#",
+      "#DDGGDDDDDGDDDD#",
+      "#DDDDDGDDDGDDDD#",
+      "#DDDDDDDDGGDDDD#",
+      "#DDDGDDDDDDDDDD#",
+      "################"
+    ],
+    [
+      "#####      #####",
+      "#    ♠       ♠ #",
+      "#  ♠     ♠♠    #",
+      "#♦    ♠   ♠    #",
+      "#          ♦   #",
+      "    ♦       ♠  #",
+      "         ♠     #",
+      "     ♠         #",
+      "  ♠       ♦    #",
+      "    ♦        ♠ #",
+      "       ♠       #",
+      "# ♠        ♠   #",
+      "#       ♠    ♠ #",
+      "#              #",
+      "#  ♦  ♠      ♠ #",
+      "################"
+    ]
+  ]
+}
