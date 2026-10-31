@@ -414,7 +414,7 @@ public final class RotboundWorldGenerator extends ChunkGenerator {
         if (lx < 0 || lx > 15 || lz < 0 || lz > 15) return;
         int base = heights[lx][lz] + 1;
         for (int y = 0; y < 18 && base + y < data.getMaxHeight(); y++) {
-            data.setBlock(lx, base + y, lz, y % 3 == 0 ? Material.IRON_BLOCK : Material.CHAIN);
+            data.setBlock(lx, base + y, lz, y % 3 == 0 ? Material.IRON_BLOCK : Material.IRON_BARS);
         }
         for (int dx = -8; dx <= 8; dx++) {
             int wx = c[0] + dx, x = wx - cx * 16, z = lz;
