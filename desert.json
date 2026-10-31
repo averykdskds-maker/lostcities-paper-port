@@ -1,0 +1,66 @@
+{
+  "palette": [
+    {
+      "char": "♠",
+      "blocks": [
+        {
+          "random": 32,
+          "block": "minecraft:poppy"
+        },
+        {
+          "random": 32,
+          "block": "minecraft:dandelion"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:dead_bush"
+        }
+      ],
+      "damaged": "minecraft:dead_bush"
+    },
+    {
+      "char": "♣",
+      "blocks": [
+        {
+          "random": 32,
+          "block": "minecraft:oak_sapling[stage=1]"
+        },
+        {
+          "random": 64,
+          "block": "minecraft:acacia_sapling[stage=1]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:dead_bush"
+        }
+      ],
+      "damaged": "minecraft:dead_bush"
+    },
+    {
+      "char": "♦",
+      "blocks": [
+        {
+          "random": 20,
+          "block": "minecraft:poppy"
+        },
+        {
+          "random": 20,
+          "block": "minecraft:dandelion"
+        },
+        {
+          "random": 20,
+          "block": "minecraft:oak_sapling[stage=1]"
+        },
+        {
+          "random": 40,
+          "block": "minecraft:acacia_sapling[stage=1]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:dead_bush"
+        }
+      ],
+      "damaged": "minecraft:dead_bush"
+    }
+  ]
+}

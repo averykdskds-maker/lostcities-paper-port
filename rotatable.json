@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:stairs",
+    "#minecraft:doors",
+    "#minecraft:banners",
+    "#minecraft:buttons",
+    "#minecraft:trapdoors",
+    "minecraft:ladder",
+    "minecraft:lever"
+  ]
+}

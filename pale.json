@@ -1,0 +1,41 @@
+{
+  "palette": [
+    {
+      "char": "♠",
+      "blocks": [
+        {
+          "random": 64,
+          "block": "minecraft:closed_eyeblossom"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:open_eyeblossom"
+        }
+      ],
+      "damaged": "minecraft:dead_bush"
+    },
+    {
+      "char": "♣",
+      "block": "minecraft:pale_oak_sapling[stage=1]",
+      "damaged": "minecraft:dead_bush"
+    },
+    {
+      "char": "♦",
+      "blocks": [
+        {
+          "random": 40,
+          "block": "minecraft:closed_eyeblossom"
+        },
+        {
+          "random": 40,
+          "block": "minecraft:open_eyeblossom"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:pale_oak_sapling[stage=1]"
+        }
+      ],
+      "damaged": "minecraft:dead_bush"
+    }
+  ]
+}

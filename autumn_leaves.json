@@ -1,0 +1,21 @@
+{
+  "palette": [
+    {
+      "char": "☘",
+      "blocks": [
+        {
+          "random": 42,
+          "block": "minecraft:red_poplar_leaves[persistent=true]"
+        },
+        {
+          "random": 43,
+          "block": "minecraft:orange_poplar_leaves[persistent=true]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:yellow_poplar_leaves[persistent=true]"
+        }
+      ]
+    }
+  ]
+}

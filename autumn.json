@@ -1,0 +1,49 @@
+{
+  "palette": [
+    {
+      "char": "♠",
+      "blocks": [
+        {
+          "random": 32,
+          "block": "minecraft:poppy"
+        },
+        {
+          "random": 32,
+          "block": "minecraft:dandelion"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:red_shrub"
+        }
+      ],
+      "damaged": "minecraft:dead_bush"
+    },
+    {
+      "char": "♣",
+      "block": "minecraft:poplar_sapling[stage=1]",
+      "damaged": "minecraft:dead_bush"
+    },
+    {
+      "char": "♦",
+      "blocks": [
+        {
+          "random": 20,
+          "block": "minecraft:poppy"
+        },
+        {
+          "random": 20,
+          "block": "minecraft:dandelion"
+        },
+        {
+          "random": 40,
+          "block": "minecraft:red_shrub"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:poplar_sapling[stage=1]"
+        }
+      ],
+      "damaged": "minecraft:dead_bush"
+    }
+  ]
+}

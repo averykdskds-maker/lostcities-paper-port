@@ -1,0 +1,62 @@
+{
+  "palette": [
+    {
+      "char": "♠",
+      "blocks": [
+        {
+          "random": 42,
+          "block": "minecraft:poppy"
+        },
+        {
+          "random": 42,
+          "block": "minecraft:fern"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:dandelion"
+        }
+      ],
+      "damaged": "minecraft:fern"
+    },
+    {
+      "char": "♣",
+      "blocks": [
+        {
+          "random": 64,
+          "block": "minecraft:jungle_sapling[stage=1]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:oak_sapling[stage=1]"
+        }
+      ],
+      "damaged": "minecraft:fern"
+    },
+    {
+      "char": "♦",
+      "blocks": [
+        {
+          "random": 24,
+          "block": "minecraft:poppy"
+        },
+        {
+          "random": 24,
+          "block": "minecraft:dandelion"
+        },
+        {
+          "random": 24,
+          "block": "minecraft:fern"
+        },
+        {
+          "random": 28,
+          "block": "minecraft:jungle_sapling[stage=1]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:oak_sapling[stage=1]"
+        }
+      ],
+      "damaged": "minecraft:fern"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "palette": [
+    {
+      "char": "'",
+      "blocks": [
+        {
+          "random": 96,
+          "block": "minecraft:pale_hanging_moss[tip=true]"
+        },
+        {
+          "random": 1000,
+          "block": "minecraft:hanging_roots[waterlogged=false]"
+        }
+      ]
+    }
+  ]
+}

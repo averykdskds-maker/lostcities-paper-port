@@ -1,0 +1,12 @@
+{
+  "palette": [
+    {
+      "char": "-",
+      "block": "minecraft:poplar_pressure_plate"
+    },
+    {
+      "char": ".",
+      "block": "minecraft:poplar_fence"
+    }
+  ]
+}
