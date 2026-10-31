@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group = 'dev.rotbound'
+version = '0.1.0-alpha1'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:26.3.build.230-stable'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 25
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand(version: project.version)
+    }
+    from(rootProject.projectDir.parentFile.toPath().resolve('lostcities-modern-tweaks-v6.0.0.zip')) {
+        into ''
+        rename { 'modern-tweaks.zip' }
+    }
+}
+
+jar {
+    archiveFileName = "LostCitiesPaper-${project.version}.jar"
+    manifest {
+        attributes(
+            'Implementation-Title': 'LostCitiesPaper',
+            'Implementation-Version': project.version
+        )
+    }
+}
