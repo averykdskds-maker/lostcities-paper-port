@@ -28,6 +28,8 @@ jobs:
         run: |
           git clone https://github.com/McJtyMods/LostCities.git /tmp/LostCities
           git -C /tmp/LostCities checkout 4bcb0c4c49a862fee2a4239493bd186f36edccfd
+      - name: Clean previous build output
+        run: gradle --no-daemon -p lostcities-paper clean
       - name: Prepare upstream source, compatibility adapter and bundled datapack
         run: |
           python3 lostcities-paper/tools/prepare_sources.py \
@@ -35,7 +37,7 @@ jobs:
             lostcities-modern-tweaks-v6.0.0.zip \
             lostcities-paper
       - name: Compile combined Lost Cities + Modern Tweaks plugin
-        run: gradle --no-daemon -p lostcities-paper clean build
+        run: gradle --no-daemon -p lostcities-paper build
       - name: Upload combined plugin
         uses: actions/upload-artifact@v4
         with:
