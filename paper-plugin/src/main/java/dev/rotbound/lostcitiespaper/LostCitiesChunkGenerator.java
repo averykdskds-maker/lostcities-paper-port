@@ -4,6 +4,7 @@ import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
 
@@ -22,6 +23,7 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
     private final int groundLevel;
     private final int minFloors;
     private final int maxFloors;
+    private final int terrainBlendChunks;
 
     public LostCitiesChunkGenerator(LostCitiesPaperPlugin plugin, AssetPack assets) {
         this.plugin = plugin;
@@ -36,6 +38,7 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
         groundLevel = plugin.getConfig().getInt("ground-level", 71);
         minFloors = Math.max(1, plugin.getConfig().getInt("building-floors-min", 2));
         maxFloors = Math.max(minFloors, plugin.getConfig().getInt("building-floors-max", 6));
+        terrainBlendChunks = Math.max(0, Math.min(8, plugin.getConfig().getInt("terrain-blend-chunks", 3)));
     }
 
     @Override
@@ -67,6 +70,10 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
     public void generateSurface(WorldInfo worldInfo, Random random, int chunkX, int chunkZ, ChunkData chunkData) {
         CityPlan city = cityAtChunk(worldInfo.getSeed(), chunkX, chunkZ);
         if (city == null) {
+            CityPlan edge = cityTransitionAtChunk(worldInfo.getSeed(), chunkX, chunkZ);
+            if (edge != null) {
+                blendTerrainToCity(chunkData, edge, chunkX, chunkZ);
+            }
             return;
         }
         if (groundLevel <= chunkData.getMinHeight() + 8 || groundLevel >= chunkData.getMaxHeight() - 64) {
@@ -83,14 +90,31 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
         boolean roadZ = Math.floorMod(offsetZ, streetSpacing) == 0;
 
         if (roadX || roadZ) {
-            boolean intersection = roadX && roadZ;
-            String streetReference = assets.chooseStreet(intersection, chunkRandom);
+            String streetType;
+            int rotation;
+            if (roadX && roadZ) {
+                streetType = "all";
+                rotation = 0;
+            } else if (roadX) {
+                // A fixed-X road runs north/south. The base straight template runs east/west.
+                boolean openToNegativeZ = cityAtChunk(worldInfo.getSeed(), chunkX, chunkZ - 1) != null;
+                boolean openToPositiveZ = cityAtChunk(worldInfo.getSeed(), chunkX, chunkZ + 1) != null;
+                streetType = openToNegativeZ && openToPositiveZ ? "straight" : "end";
+                rotation = !openToNegativeZ ? 3 : 1;
+            } else {
+                // A fixed-Z road already runs east/west in the base template.
+                boolean openToNegativeX = cityAtChunk(worldInfo.getSeed(), chunkX - 1, chunkZ) != null;
+                boolean openToPositiveX = cityAtChunk(worldInfo.getSeed(), chunkX + 1, chunkZ) != null;
+                streetType = openToNegativeX && openToPositiveX ? "straight" : "end";
+                rotation = !openToNegativeX ? 2 : 0;
+            }
+
+            String streetReference = assets.chooseStreet(streetType, chunkRandom);
             AssetPack.Part street = assets.part(streetReference, defaultPalette, chunkRandom);
             if (street == null) {
                 street = assets.part("lcmt:street/street_straight_base", defaultPalette, chunkRandom);
             }
             if (street != null) {
-                int rotation = roadZ && !roadX ? 1 : 0;
                 placePart(street, chunkData, 0, groundLevel + 1, 0, rotation, chunkRandom);
             }
             return;
@@ -115,6 +139,48 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
                     }
                 }
                 data.setBlock(x, groundLevel, z, Material.STONE);
+            }
+        }
+    }
+
+    /*
+     * A narrow, chunk-based grade transition avoids a sheer vertical cut where the
+     * flat city grid meets untouched vanilla hills and mountains. The last ring
+     * keeps the original vanilla surface height, so terrain outside it is unchanged.
+     */
+    private void blendTerrainToCity(ChunkData data, CityPlan city, int chunkX, int chunkZ) {
+        int distance = cityDistanceChunks(city, chunkX, chunkZ);
+        int ring = distance - city.radiusChunks;
+        if (ring < 0 || ring >= terrainBlendChunks) {
+            return;
+        }
+        double blend = (ring + 1.0) / terrainBlendChunks;
+
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int top = data.getHeight(HeightMap.WORLD_SURFACE_WG, x, z) - 1;
+                if (top < data.getMinHeight() || top >= data.getMaxHeight()) {
+                    continue;
+                }
+
+                BlockData surface = data.getBlockData(x, top, z);
+                if (surface == null || surface.getMaterial().isAir()) {
+                    continue;
+                }
+
+                int target = (int) Math.round(groundLevel + (top - groundLevel) * blend);
+                target = Math.max(data.getMinHeight() + 1, Math.min(data.getMaxHeight() - 2, target));
+
+                if (target > top) {
+                    for (int y = top + 1; y < target; y++) {
+                        data.setBlock(x, y, z, Material.STONE);
+                    }
+                } else if (target < top) {
+                    for (int y = target + 1; y <= top; y++) {
+                        data.setBlock(x, y, z, Material.AIR);
+                    }
+                }
+                data.setBlock(x, target, z, surface);
             }
         }
     }
@@ -182,10 +248,10 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
                     }
 
                     if (symbol == '~') {
-                        continue; // structure-void: preserve the underlying terrain
+                        continue;
                     }
 
-                    org.bukkit.block.data.BlockData block = part.palette().resolve(String.valueOf(symbol), random, assets);
+                    BlockData block = part.palette().resolve(String.valueOf(symbol), random, assets);
                     if (block == null && symbol == '#') {
                         block = assets.blockData("minecraft:stone_bricks");
                     } else if (block == null && symbol == '}') {
@@ -201,17 +267,34 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
     }
 
     private CityPlan cityAtChunk(long worldSeed, int chunkX, int chunkZ) {
+        CityPlan plan = planForChunkRegion(worldSeed, chunkX, chunkZ);
+        return plan != null && cityDistanceChunks(plan, chunkX, chunkZ) < plan.radiusChunks ? plan : null;
+    }
+
+    private CityPlan cityTransitionAtChunk(long worldSeed, int chunkX, int chunkZ) {
+        if (terrainBlendChunks == 0) {
+            return null;
+        }
+        CityPlan plan = planForChunkRegion(worldSeed, chunkX, chunkZ);
+        if (plan == null) {
+            return null;
+        }
+        int distance = cityDistanceChunks(plan, chunkX, chunkZ);
+        return distance >= plan.radiusChunks && distance < plan.radiusChunks + terrainBlendChunks ? plan : null;
+    }
+
+    private CityPlan planForChunkRegion(long worldSeed, int chunkX, int chunkZ) {
         int blockX = chunkX * 16 + 8;
         int blockZ = chunkZ * 16 + 8;
         int regionX = Math.floorDiv(blockX, regionBlocks);
         int regionZ = Math.floorDiv(blockZ, regionBlocks);
-        CityPlan plan = cityForRegion(worldSeed, regionX, regionZ);
-        if (plan == null) {
-            return null;
-        }
-        long dx = (long) blockX - plan.centerBlockX;
-        long dz = (long) blockZ - plan.centerBlockZ;
-        return dx * dx + dz * dz <= (long) plan.radius * plan.radius ? plan : null;
+        return cityForRegion(worldSeed, regionX, regionZ);
+    }
+
+    private int cityDistanceChunks(CityPlan plan, int chunkX, int chunkZ) {
+        int dx = Math.abs(chunkX - plan.centerChunkX);
+        int dz = Math.abs(chunkZ - plan.centerChunkZ);
+        return Math.max(dx, dz);
     }
 
     private CityPlan cityForRegion(long seed, int regionX, int regionZ) {
@@ -223,14 +306,14 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
         int centerZ = regionZ * regionBlocks + regionBlocks / 2 + random.nextInt(centerJitter * 2 + 1) - centerJitter;
         centerX = Math.floorDiv(centerX, 16) * 16;
         centerZ = Math.floorDiv(centerZ, 16) * 16;
-        int radius = minRadius + random.nextInt(maxRadius - minRadius + 1);
-        return new CityPlan(centerX, centerZ, radius, Math.floorDiv(centerX, 16), Math.floorDiv(centerZ, 16));
+        int requestedRadius = minRadius + random.nextInt(maxRadius - minRadius + 1);
+        int requestedChunks = Math.max(streetSpacing, (requestedRadius + 15) / 16);
+        int radiusChunks = ((requestedChunks + streetSpacing - 1) / streetSpacing) * streetSpacing;
+        return new CityPlan(centerX, centerZ, Math.floorDiv(centerX, 16), Math.floorDiv(centerZ, 16), radiusChunks);
     }
 
     public Location suggestedSpawn(World world) {
-        int regionX = 0;
-        int regionZ = 0;
-        CityPlan plan = cityForRegion(world.getSeed(), regionX, regionZ);
+        CityPlan plan = cityForRegion(world.getSeed(), 0, 0);
         if (plan == null) {
             plan = cityForRegion(world.getSeed(), 1, 0);
         }
@@ -257,6 +340,7 @@ public final class LostCitiesChunkGenerator extends ChunkGenerator {
         return Math.max(minimum, Math.min(maximum, value));
     }
 
-    private record CityPlan(int centerBlockX, int centerBlockZ, int radius, int centerChunkX, int centerChunkZ) {
+    private record CityPlan(int centerBlockX, int centerBlockZ, int centerChunkX, int centerChunkZ,
+                            int radiusChunks) {
     }
 }
