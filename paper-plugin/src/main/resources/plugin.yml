@@ -3,18 +3,18 @@ version: ${version}
 main: dev.rotbound.RotboundPlugin
 api-version: '26.3'
 author: Rotbound
-description: Server-side Forgotten Earth generation, structures, loot and weapons.
+description: Server-side Forgotten Earth generation, ruined infrastructure and weapons.
 commands:
   rotbound:
     description: Rotbound administration and exploration commands.
-    usage: /rotbound <help|info|locate|weapons|weapon|ammo|reload>
+    usage: /rotbound <help|info|locate|tp|visit|weapons|weapon|ammo|reload>
     aliases: [rb]
 permissions:
   rotbound.admin:
     description: Allows administration and test commands.
     default: op
   rotbound.locate:
-    description: Allows locating generated settlements and country regions.
+    description: Allows locating and visiting generated settlements.
     default: op
   rotbound.weapons.use:
     description: Allows use of Rotbound weapons.

@@ -1,5 +1,5 @@
 # Rotbound — The Forgotten Earth
-config-version: 2
+config-version: 3
 systems:
   weapons: true
   world-generation: true
@@ -11,18 +11,18 @@ systems:
 world:
   target-world: world
   sea-level: 63
-  structure-density: 0.90
+  structure-density: 1.0
   preserve-existing-chunks: true
 settlements:
-  region-size-blocks: 4096
-  locate-search-regions: 5
+  region-size-blocks: 8192
+  locate-search-regions: 4
 reclamation:
   terrain-adaptation: true
   biome-aware-vegetation: true
   coastal-inundation: true
   remove-active-lights: true
 ships:
-  abandoned-ship-chance-per-ocean-region: 0.10
+  abandoned-ship-chance-per-ocean-region: 0.075
   ocean-region-size-blocks: 2048
 loot:
   container-refill: false
