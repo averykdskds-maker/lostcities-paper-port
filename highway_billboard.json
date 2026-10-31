@@ -1,0 +1,8 @@
+{
+  "buildings": ["lcmt:highway/billboard"],
+  "rotatable": true,
+  "clearhighwayrailing": false,
+  "supportpart": "lcmt:highway/billboard_support",
+  "terrainheight": "highest",
+  "terrainfix": "repeatslice"
+}

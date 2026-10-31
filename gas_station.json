@@ -1,0 +1,11 @@
+{
+  "filler": "v",
+  "rubble": "Q",
+  "minfloors": 1,
+  "maxfloors": 1,
+  "parts": [
+    {
+      "part": "lcmt:highway/gas_station_1"
+    }
+  ]
+}

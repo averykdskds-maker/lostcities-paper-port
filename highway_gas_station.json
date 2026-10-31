@@ -1,0 +1,8 @@
+{
+  "buildings": ["lcmt:highway/gas_station"],
+  "rotatable": true,
+  "clearhighwayrailing": true,
+  "supportpart": "lcmt:support/roadside_supports",
+  "terrainheight": "highest",
+  "terrainfix": "repeatslice"
+}

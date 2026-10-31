@@ -1,0 +1,44 @@
+{
+  "filler": "v",
+  "rubble": "v",
+  "minfloors": 2,
+  "maxfloors": 2,
+  "parts": [
+    {
+      "floor": 0,
+      "part": "lcmt:highway/billboard_pillar"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_1"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_2"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_3"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_4"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_5"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_6"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_7"
+    },
+    {
+      "floor": 1,
+      "part": "lcmt:highway/billboard_body_8"
+    }
+  ]
+}

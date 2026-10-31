@@ -1,0 +1,14 @@
+{
+  "filler": "v",
+  "rubble": "R",
+  "minfloors": 1,
+  "maxfloors": 1,
+  "parts": [
+    {
+      "part": "lcmt:highway/restaurant_parking_1"
+    },
+    {
+      "part": "lcmt:highway/restaurant_parking_2"
+    }
+  ]
+}
