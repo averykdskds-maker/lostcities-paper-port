@@ -24,7 +24,6 @@ import java.util.zip.ZipInputStream;
 
 public final class AssetPack {
     private final Map<String, JsonObject> json = new HashMap<>();
-    private final Map<String, Part> partCache = new ConcurrentHashMap<>();
     private final Map<String, BuildingDefinition> buildingCache = new ConcurrentHashMap<>();
     private final Map<String, BlockData> blockDataCache = new ConcurrentHashMap<>();
     private final JsonObject commonCityStyle;
@@ -168,13 +167,6 @@ public final class AssetPack {
     }
 
     public Part part(String id, Palette fallback, Random random) {
-        // All current Modern Tweaks building parts are 16x16 and resolve to the same world-style palette.
-        // Ref-palette parts are also stable, so parsing them once is safe.
-        Part cached = partCache.get(id);
-        if (cached != null) {
-            return cached;
-        }
-
         JsonObject object = asset("parts", id);
         if (object == null || !object.has("slices")) {
             return null;
@@ -198,8 +190,7 @@ public final class AssetPack {
             palette = parsePalette(object, fallback);
         }
         Part created = new Part(xSize, zSize, List.copyOf(slices), palette);
-        Part previous = partCache.putIfAbsent(id, created);
-        return previous == null ? created : previous;
+        return created;
     }
 
     public Palette standardPalette(Random random) {
