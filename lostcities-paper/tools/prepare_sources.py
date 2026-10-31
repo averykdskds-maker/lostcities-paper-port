@@ -44,6 +44,33 @@ def copy_upstream_sources(upstream: Path, destination: Path) -> None:
     text = text.replace("NeoForge.EVENT_BUS.post(event);", "LostCities.post(event);")
     building_info.write_text(text, encoding="utf-8")
 
+    # Minecraft 26.3 requires a DataFixTypes argument in SavedDataType.
+    for relative in (
+        "worldgen/LostCityHighwayData.java",
+        "worldgen/LostCityWorldGenData.java",
+        "data/LostData.java",
+        "editor/EditModeData.java",
+    ):
+        java_file = target / relative
+        body = java_file.read_text(encoding="utf-8")
+        body = body.replace(
+            "import net.minecraft.world.level.saveddata.SavedDataType;\n",
+            "import net.minecraft.world.level.saveddata.SavedDataType;\nimport net.minecraft.util.datafix.DataFixTypes;\n",
+        )
+        body = body.replace(
+            "            CODEC\n    );",
+            "            CODEC,\n            DataFixTypes.NONE\n    );",
+        )
+        java_file.write_text(body, encoding="utf-8")
+
+    terrain = target / "worldgen/LostCityTerrainFeature.java"
+    body = terrain.read_text(encoding="utf-8")
+    body = body.replace(
+        "level.isAreaLoaded(pos, 1)",
+        "level.hasChunksAt(pos.offset(-16, 0, -16), pos.offset(16, 0, 16))",
+    )
+    terrain.write_text(body, encoding="utf-8")
+
     profile_setup = target / "config/ProfileSetup.java"
     text = profile_setup.read_text(encoding="utf-8")
     text = text.replace("import net.neoforged.fml.loading.FMLPaths;\n", "")
@@ -113,7 +140,6 @@ def main() -> None:
     generated_source.mkdir(parents=True)
     generated_resources.mkdir(parents=True)
     copy_upstream_sources(args.upstream.resolve(), generated_source)
-    copy_port_overlay(project, generated_source)
     copy_datapack(args.upstream.resolve(), args.tweaks_zip.resolve(),
                   generated_resources / "lostcities_datapack")
     print(f"Prepared {len(list(generated_source.rglob('*.java')))} upstream/adapter Java files and "

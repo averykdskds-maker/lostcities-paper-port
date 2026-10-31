@@ -5,7 +5,6 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.RegistryOps;
 import mcjty.lostcities.LostCities;
 import mcjty.lostcities.api.ILostCityAsset;
 import mcjty.lostcities.api.ILostCityAssetRegistry;
@@ -55,7 +54,7 @@ public final class RegistryAssetRegistry<T extends ILostCityAsset, R extends IAs
         ResourceManager manager = LostCities.getServer().getResourceManager();
         Map<Identifier, Resource> resources = manager.listResources(
                 "lostcities/" + folder, id -> id.getPath().endsWith(".json"));
-        DynamicOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, level.registryAccess());
+        DynamicOps<JsonElement> ops = level.registryAccess().createSerializationContext(JsonOps.INSTANCE);
         List<Identifier> names = new ArrayList<>(resources.keySet());
         names.sort(Comparator.comparing(Identifier::toString));
         for (Identifier name : names) {
