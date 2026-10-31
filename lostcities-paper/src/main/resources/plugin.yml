@@ -1,0 +1,6 @@
+name: LostCitiesPaper
+version: '${version}'
+main: dev.rotbound.lostcitiespaper.LostCitiesPaperPlugin
+api-version: '26.3'
+author: OpenAI
+description: Paper port of McJty's Lost Cities with Modern Tweaks assets.

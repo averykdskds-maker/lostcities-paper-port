@@ -1,0 +1,6 @@
+# Lost Cities Paper — server settings
+# Detailed generation settings and profiles are generated under config/lostcities/.
+enabled: true
+target-world: world
+profile: default
+debug: false
