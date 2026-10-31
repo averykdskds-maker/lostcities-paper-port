@@ -19,3 +19,8 @@ ground-level: 71
 # Number of floor segments stacked in each generated building.
 building-floors-min: 2
 building-floors-max: 6
+
+
+# Number of chunks used to grade terrain between the flat city and untouched
+# vanilla terrain. Set to 0 to disable the transition.
+terrain-blend-chunks: 3
