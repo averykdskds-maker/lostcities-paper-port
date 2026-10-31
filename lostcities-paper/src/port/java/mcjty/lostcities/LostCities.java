@@ -28,7 +28,7 @@ public final class LostCities {
     public static void initialize(JavaPlugin javaPlugin) {
         plugin = javaPlugin;
         server = ((CraftServer) javaPlugin.getServer()).getServer();
-        Path root = javaPlugin.getDataFolder().toPath().getParent().getParent();
+        Path root = javaPlugin.getServer().getWorldContainer().toPath();
         configDir = root.resolve("config");
         Config.initialize(configDir);
         setup.preInit();
