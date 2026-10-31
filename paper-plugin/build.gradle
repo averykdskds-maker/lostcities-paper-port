@@ -33,17 +33,13 @@ processResources {
     filesMatching('plugin.yml') {
         expand(version: project.version)
     }
-    from(rootProject.projectDir.parentFile.toPath().resolve('lostcities-modern-tweaks-v6.0.0.zip')) {
-        into ''
-        rename { 'modern-tweaks.zip' }
-    }
 }
 
 jar {
-    archiveFileName = "LostCitiesPaper-${project.version}.jar"
+    archiveFileName = "Rotbound-${project.version}.jar"
     manifest {
         attributes(
-            'Implementation-Title': 'LostCitiesPaper',
+            'Implementation-Title': 'Rotbound',
             'Implementation-Version': project.version
         )
     }
