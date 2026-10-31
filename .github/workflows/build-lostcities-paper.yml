@@ -38,6 +38,90 @@ jobs:
             lostcities-paper
       - name: Compile combined Lost Cities + Modern Tweaks plugin
         run: gradle --no-daemon -p lostcities-paper build
+      - name: Smoke-test plugin on Paper 26.3
+        shell: bash
+        run: |
+          set -euo pipefail
+          smoke="$RUNNER_TEMP/paper-smoke"
+          mkdir -p "$smoke/plugins"
+          cp lostcities-paper/build/libs/LostCitiesPaper-0.1.0-alpha1.jar "$smoke/plugins/"
+          printf 'eula=true\n' > "$smoke/eula.txt"
+          cat > "$smoke/server.properties" <<'PROPS'
+          server-port=25575
+          online-mode=false
+          level-name=world
+          level-seed=681734829
+          view-distance=3
+          simulation-distance=2
+          spawn-protection=0
+          sync-chunk-writes=true
+          enable-rcon=false
+          enable-query=false
+          PROPS
+
+          response="$(curl -fsSL \
+            -H 'User-Agent: lostcities-paper-port-ci/0.1 (https://github.com/averykdskds-maker/lostcities-paper-port)' \
+            'https://fill.papermc.io/v3/projects/paper/versions/26.3/builds')"
+          paper_url="$(printf '%s' "$response" | jq -r 'first(.[] | select(.channel == "STABLE") | .downloads["server:default"].url) // empty')"
+          if [[ -z "$paper_url" ]]; then
+            echo "Paper 26.3 stable build URL was not returned by the official downloads API."
+            printf '%s\n' "$response" | head -c 3000
+            exit 1
+          fi
+          curl -fsSL -H 'User-Agent: lostcities-paper-port-ci/0.1 (https://github.com/averykdskds-maker/lostcities-paper-port)' \
+            "$paper_url" -o "$smoke/paper.jar"
+
+          cd "$smoke"
+          mkfifo console.in
+          java -Xms1G -Xmx2G -jar paper.jar --nogui < console.in > server.log 2>&1 &
+          server_pid=$!
+          exec 3>console.in
+
+          ready=0
+          for _ in $(seq 1 180); do
+            if grep -q 'Done (' server.log; then ready=1; break; fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              echo "Paper exited before startup completed."
+              tail -n 250 server.log
+              exit 1
+            fi
+            sleep 1
+          done
+          if [[ "$ready" != "1" ]]; then
+            echo "Paper did not finish startup within the smoke-test limit."
+            tail -n 250 server.log
+            kill "$server_pid" 2>/dev/null || true
+            exit 1
+          fi
+
+          echo 'datapack list enabled' >&3
+          sleep 3
+          echo 'summon minecraft:marker 1600 100 1600' >&3
+          sleep 15
+          echo 'stop' >&3
+          exec 3>&-
+          wait "$server_pid"
+
+          grep -q 'Lost Cities Paper port enabled' server.log
+          grep -q 'Attached original Lost Cities generation to world' server.log
+          grep -q 'Lost Cities FEATURES generation entered' server.log
+          test -f config/lostcities-server.toml
+          test -f config/lostcities/profiles/default.json
+          if grep -E 'Error generating chunk|Failed to load Lost Cities|Could not load plugin|Failed to enable LostCitiesPaper' server.log; then
+            echo "Lost Cities runtime smoke test emitted a generation/plugin error."
+            exit 1
+          fi
+          mkdir -p "$GITHUB_WORKSPACE/smoke-artifact"
+          cp server.log "$GITHUB_WORKSPACE/smoke-artifact/server.log"
+          echo "Paper runtime smoke test completed with the Lost Cities generation callback invoked."
+      - name: Upload Paper smoke-test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LostCitiesPaper-26.3-smoke-test
+          path: smoke-artifact/server.log
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Upload combined plugin
         uses: actions/upload-artifact@v4
         with:

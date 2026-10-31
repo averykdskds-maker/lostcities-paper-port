@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class LostCitiesPopulator extends BlockPopulator {
     private final LostCitiesPaperPlugin plugin;
     private final AtomicBoolean integrationReported = new AtomicBoolean();
+    private final AtomicBoolean firstGeneration = new AtomicBoolean();
 
     public LostCitiesPopulator(LostCitiesPaperPlugin plugin) {
         this.plugin = plugin;
@@ -40,6 +41,10 @@ public final class LostCitiesPopulator extends BlockPopulator {
         }
         if (integrationReported.compareAndSet(false, true)) {
             plugin.getLogger().info("Connected original Lost Cities engine to Paper FEATURES-stage WorldGenRegion.");
+        }
+        if (firstGeneration.compareAndSet(false, true)) {
+            plugin.getLogger().info("Lost Cities FEATURES generation entered for chunk " + chunkX + "," + chunkZ
+                    + " in world '" + worldInfo.getName() + "'.");
         }
         LostCities.LOSTCITY_FEATURE.generate(region, chunkX, chunkZ);
     }
