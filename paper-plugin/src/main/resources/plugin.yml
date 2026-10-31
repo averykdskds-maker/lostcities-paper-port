@@ -1,0 +1,16 @@
+name: LostCitiesPaper
+version: ${version}
+main: dev.rotbound.lostcitiespaper.LostCitiesPaperPlugin
+api-version: '26.3'
+author: RotBound
+description: Native Paper world generator using Lost Cities and Modern Tweaks assets.
+commands:
+  lostcities:
+    description: Create and manage Lost Cities worlds.
+    usage: /lostcities <create|help> [world]
+    aliases: [lc]
+    permission: lostcitiespaper.admin
+permissions:
+  lostcitiespaper.admin:
+    description: Allows creating Lost Cities worlds.
+    default: op
