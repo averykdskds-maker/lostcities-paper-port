@@ -1,26 +1,81 @@
-# LostCitiesPaper alpha configuration.
-# These settings apply only to worlds created with /lostcities create <name>.
+# Rotbound — The Forgotten Earth
+systems:
+  weapons: true
+  world-generation: false
+  reclamation: false
+  structures: false
+  loot: false
+  wildlife: false
+  environmental-storytelling: false
 
-# Chance that a 768x768 region contains a city (1.0 = every region).
-city-chance: 1.0
+world:
+  target-world: world
+  generation-mode: disabled
+  preserve-existing-chunks: true
 
-# Must be a multiple of 16. City centers are placed near each region's centre.
-city-region-blocks: 768
-city-center-jitter-blocks: 32
-city-radius-min-blocks: 176
-city-radius-max-blocks: 270
+reclamation:
+  terrain-adaptation: true
+  biome-aware-vegetation: true
+  coastal-inundation: true
+  remove-active-lights: true
 
-# A street chunk is placed every N chunks on each city axis.
-street-spacing-chunks: 4
+loot:
+  container-refill: false
+  guarantee-valuable-items: false
+  rare-discovery-multiplier: 1.0
+  tables:
+    suburban-house:
+      everyday: 0.80
+      salvage: 0.18
+      valuable: 0.02
+    police-station:
+      everyday: 0.55
+      salvage: 0.38
+      valuable: 0.07
+    military-facility:
+      everyday: 0.35
+      salvage: 0.50
+      valuable: 0.14
+      exceptional: 0.01
+    laboratory:
+      everyday: 0.45
+      salvage: 0.38
+      valuable: 0.15
+      exceptional: 0.02
 
-# Flat urban ground level. Existing terrain is flattened only inside city chunks.
-ground-level: 71
-
-# Number of floor segments stacked in each generated building.
-building-floors-min: 2
-building-floors-max: 6
-
-
-# Number of chunks used to grade terrain between the flat city and untouched
-# vanilla terrain. Set to 0 to disable the transition.
-terrain-blend-chunks: 3
+weapons:
+  pistol:
+    cooldown-ms: 350
+  rifle:
+    cooldown-ms: 650
+  shotgun:
+    cooldown-ms: 900
+    pellets: 6
+  flamethrower:
+    cooldown-ms: 250
+  grenade:
+    cooldown-ms: 1200
+    damage: 8.0
+    radius: 4.0
+  smg:
+    cooldown-ms: 500
+  railgun:
+    cooldown-ms: 1800
+    splash-radius: 2.0
+  tear_gas:
+    cooldown-ms: 1800
+    radius: 6.0
+    duration-ticks: 160
+  mortar:
+    cooldown-ms: 2500
+    fuse-ticks: 80
+    yield: 4.0
+  sniper:
+    cooldown-ms: 10000
+  minigun:
+    # Two snowballs every four ticks = about 10 projectiles per second.
+    interval-ticks: 4
+    projectiles-per-volley: 2
+    heat-per-volley: 5
+    max-heat: 100
+    cooling-per-10-ticks: 3
