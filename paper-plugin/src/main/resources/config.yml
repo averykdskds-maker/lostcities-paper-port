@@ -1,4 +1,5 @@
 # Rotbound — The Forgotten Earth
+config-version: 2
 systems:
   weapons: true
   world-generation: true
