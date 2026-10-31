@@ -1,0 +1,56 @@
+name: Inspect Lost Cities source bundles
+
+on:
+  push:
+    branches: [lostcities-paper-26.3]
+    paths:
+      - '.github/workflows/inspect-lost-cities.yml'
+      - 'Lost cities port.zip'
+      - 'LostCities-26.3-12.0.0.jar'
+      - 'lostcities-modern-tweaks-v6.0.0.zip'
+      - 'lostcities-modern-tweaks-v6.0.0.jar'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect archive contents
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audit
+          for f in "Lost cities port.zip" "lostcities-modern-tweaks-v6.0.0.zip"; do
+            echo "===== $f =====" | tee -a audit/summary.txt
+            unzip -Z1 "$f" | tee "audit/$(basename "$f").files.txt" | head -80 | tee -a audit/summary.txt
+            echo "TOTAL FILES: $(unzip -Z1 "$f" | wc -l)" | tee -a audit/summary.txt
+          done
+          echo "===== Lost Cities JAR =====" | tee -a audit/summary.txt
+          jar tf "LostCities-26.3-12.0.0.jar" > audit/LostCities.jar.files.txt
+          echo "TOTAL ENTRIES: $(wc -l < audit/LostCities.jar.files.txt)" | tee -a audit/summary.txt
+          head -80 audit/LostCities.jar.files.txt | tee -a audit/summary.txt
+          echo "===== Modern Tweaks JAR =====" | tee -a audit/summary.txt
+          jar tf "lostcities-modern-tweaks-v6.0.0.jar" > audit/ModernTweaks.jar.files.txt
+          echo "TOTAL ENTRIES: $(wc -l < audit/ModernTweaks.jar.files.txt)" | tee -a audit/summary.txt
+          head -80 audit/ModernTweaks.jar.files.txt | tee -a audit/summary.txt
+          unzip -q "Lost cities port.zip" -d audit/port-zip
+          echo "===== PORT ZIP TOP LEVEL =====" | tee -a audit/summary.txt
+          find audit/port-zip -maxdepth 3 -type f | head -150 | tee -a audit/summary.txt
+          echo "===== JAVA SOURCE COUNT =====" | tee -a audit/summary.txt
+          find audit/port-zip -type f -name '*.java' | wc -l | tee -a audit/summary.txt
+          echo "===== JSON ASSET COUNT =====" | tee -a audit/summary.txt
+          find audit/port-zip -type f -name '*.json' | wc -l | tee -a audit/summary.txt
+      - name: Upload audit and source archives
+        uses: actions/upload-artifact@v4
+        with:
+          name: lostcities-source-audit
+          path: |
+            audit/
+            Lost cities port.zip
+            LostCities-26.3-12.0.0.jar
+            lostcities-modern-tweaks-v6.0.0.zip
+            lostcities-modern-tweaks-v6.0.0.jar
+          retention-days: 7
