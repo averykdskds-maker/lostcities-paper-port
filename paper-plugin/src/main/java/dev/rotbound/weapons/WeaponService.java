@@ -51,7 +51,7 @@ public final class WeaponService implements Listener {
     private final NamespacedKey mortarKey;
     private final Random random = new Random();
     private final Map<UUID, ShotData> projectileData = new HashMap<>();
-    private final Map<UUID, Long> cooldowns = new HashMap<>();
+    private final Map<UUID, Map<WeaponType, Long>> cooldowns = new HashMap<>();
     private final Map<UUID, BukkitTask> minigunTasks = new HashMap<>();
     private final Map<UUID, Integer> minigunHeat = new HashMap<>();
     private final Set<Material> supportedAmmo = EnumSet.noneOf(Material.class);
@@ -98,7 +98,8 @@ public final class WeaponService implements Listener {
 
     public void startCoolingTask() {
         coolingTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-            minigunHeat.replaceAll((uuid, heat) -> Math.max(0, heat - 3));
+            int cooling = Math.max(0, plugin.getConfig().getInt("weapons.minigun.cooling-per-10-ticks", 3));
+            minigunHeat.replaceAll((uuid, heat) -> Math.max(0, heat - cooling));
             minigunHeat.entrySet().removeIf(entry -> entry.getValue() == 0 && !minigunTasks.containsKey(entry.getKey()));
         }, 10L, 10L);
     }
@@ -179,13 +180,14 @@ public final class WeaponService implements Listener {
     private void fire(Player player, WeaponType type) {
         long now = System.currentTimeMillis();
         long cooldown = plugin.getConfig().getLong("weapons." + type.id() + ".cooldown-ms", type.cooldownMillis());
-        long readyAt = cooldowns.getOrDefault(player.getUniqueId(), 0L);
+        Map<WeaponType, Long> playerCooldowns = cooldowns.computeIfAbsent(player.getUniqueId(), ignored -> new HashMap<>());
+        long readyAt = playerCooldowns.getOrDefault(type, 0L);
         if (now < readyAt) return;
         if (!consumeAmmo(player, type.ammoMaterial(), type.ammoPerShot())) {
             player.sendMessage(ChatColor.RED + "Out of " + type.ammoMaterial().name().toLowerCase().replace('_', ' ') + ".");
             return;
         }
-        if (cooldown > 0) cooldowns.put(player.getUniqueId(), now + cooldown);
+        if (cooldown > 0) playerCooldowns.put(type, now + cooldown);
 
         switch (type) {
             case PISTOL -> spawnSnowball(player, type, type.damage(), type.velocity(), spread(player.getEyeLocation().getDirection(), 0.0));
@@ -341,18 +343,24 @@ public final class WeaponService implements Listener {
     private boolean consumeAmmo(Player player, Material material, int amount) {
         PlayerInventory inventory = player.getInventory();
         ItemStack[] contents = inventory.getStorageContents();
+        int available = 0;
+        for (ItemStack item : contents) {
+            if (item != null && item.getType() == material && identify(item) == null) {
+                available += item.getAmount();
+            }
+        }
+        if (available < amount) return false;
+
         int remaining = amount;
         for (int i = 0; i < contents.length && remaining > 0; i++) {
             ItemStack item = contents[i];
-            if (item == null || item.getType() != material) continue;
-            if (identify(item) != null) continue;
+            if (item == null || item.getType() != material || identify(item) != null) continue;
             int take = Math.min(remaining, item.getAmount());
             int left = item.getAmount() - take;
             if (left <= 0) contents[i] = null;
             else item.setAmount(left);
             remaining -= take;
         }
-        if (remaining > 0) return false;
         inventory.setStorageContents(contents);
         return true;
     }
