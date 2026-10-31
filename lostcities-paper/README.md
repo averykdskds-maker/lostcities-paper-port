@@ -2,7 +2,7 @@
 
 A server-side Paper port of McJty's Lost Cities 26.3 generation engine, bundled with the Lost Cities Modern Tweaks 6.0.0 datapack assets.
 
-**This is an alpha source port.** It compiles against Paper 26.3 / Java 25 and packages the original terrain-generation engine and asset files. It has passed an automated live-server smoke test on Paper 26.3 build 235: the plugin enabled, its datapack and profile files loaded, and a forced new chunk entered the original FEATURES-stage generator without a generation error. Broader biome, structure, multiplayer and long-running tests are still outstanding, so keep backups and test on a disposable world first.
+**This is an alpha source port.** It compiles against Paper 26.3 / Java 25 and packages the original terrain-generation engine and asset files. It has passed an automated live-server smoke test on Paper 26.3 build 235: the plugin enabled at Paper's STARTUP phase, its datapack and profile files loaded, and the original FEATURES-stage generator ran for chunk `(0,0)` before Paper finished preparing the spawn area. A forced distant chunk was also loaded without a generation error. Broader biome, structure, multiplayer and long-running tests are still outstanding, so keep backups and test on a disposable world first.
 
 ## What is included
 
@@ -82,6 +82,7 @@ Profile changing and reload require the `lostcities.admin` permission (default: 
 
 ## World-generation notes
 
+- The plugin loads at Paper's `STARTUP` phase and attaches its populator during `WorldInitEvent`, before initial spawn-area generation. The smoke test confirmed generation began in chunk `(0,0)` before Paper reported the spawn area prepared.
 - Generation applies only to chunks generated after the populator has been attached.
 - Existing chunks are not regenerated or converted. Use a fresh world for a clean test.
 - Changing profiles affects newly generated chunks; already generated chunks keep their existing blocks.
