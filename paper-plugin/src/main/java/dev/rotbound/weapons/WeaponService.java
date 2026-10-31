@@ -4,6 +4,7 @@ import dev.rotbound.RotboundPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -144,9 +145,7 @@ public final class WeaponService implements Listener {
         LivingEntity hit = event.getHitEntity() instanceof LivingEntity living ? living : null;
 
         switch (data.type()) {
-            case PISTOL, SHOTGUN -> {
-                if (hit != null && shooter != null) hit.damage(data.damage(), shooter);
-            }
+            case PISTOL, SHOTGUN, RIFLE, SMG, SNIPER, MINIGUN -> { /* Native arrow damage is applied by Minecraft. */ }
             case FLAMETHROWER -> {
                 if (hit != null) {
                     hit.setFireTicks(Math.max(hit.getFireTicks(), 60));
@@ -190,18 +189,18 @@ public final class WeaponService implements Listener {
         if (cooldown > 0) playerCooldowns.put(type, now + cooldown);
 
         switch (type) {
-            case PISTOL -> spawnSnowball(player, type, type.damage(), type.velocity(), spread(player.getEyeLocation().getDirection(), 0.0));
+            case PISTOL -> shootArrow(player, type, type.damage(), type.velocity());
             case RIFLE -> shootArrow(player, type, type.damage(), type.velocity());
             case SHOTGUN -> {
                 int pellets = plugin.getConfig().getInt("weapons.shotgun.pellets", 6);
                 pellets = Math.max(5, Math.min(7, pellets));
                 for (int i = 0; i < pellets; i++) {
-                    spawnSnowball(player, type, type.damage(), type.velocity(),
+                    shootArrow(player, type, type.damage(), type.velocity(),
                             spread(player.getEyeLocation().getDirection(), 0.11));
                 }
             }
             case FLAMETHROWER -> spawnFireball(player, type);
-            case GRENADE -> spawnSnowball(player, type, type.damage(), type.velocity(),
+            case GRENADE -> spawnThrowableVisual(player, type, Material.ENDER_PEARL, type.velocity(),
                     spread(player.getEyeLocation().getDirection(), 0.015));
             case SMG -> {
                 for (int i = 0; i < 3; i++) {
@@ -215,13 +214,13 @@ public final class WeaponService implements Listener {
                 Arrow arrow = shootArrow(player, type, type.damage(), type.velocity());
                 arrow.setPierceLevel((byte) 4);
             }
-            case TEAR_GAS -> spawnSnowball(player, type, 0.0, type.velocity(),
+            case TEAR_GAS -> spawnThrowableVisual(player, type, Material.POTION, type.velocity(),
                     spread(player.getEyeLocation().getDirection(), 0.01));
             case MORTAR -> launchMortar(player);
             case SNIPER -> shootArrow(player, type, type.damage(), type.velocity());
             case MINIGUN -> { }
         }
-        player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 0.35f, 1.7f);
+        player.playSound(player.getLocation(), type == WeaponType.FLAMETHROWER ? Sound.ENTITY_BLAZE_SHOOT : Sound.ENTITY_ARROW_SHOOT, 0.5f, 1.0f);
     }
 
     private void spawnSnowball(Player player, WeaponType type, double damage, double velocity, Vector direction) {
@@ -239,9 +238,18 @@ public final class WeaponService implements Listener {
         arrow.setDamage(damage);
         arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
         arrow.setSilent(true);
-        if (type == WeaponType.RAILGUN) projectileData.put(arrow.getUniqueId(),
-                new ShotData(player.getUniqueId(), type, damage));
+        projectileData.put(arrow.getUniqueId(), new ShotData(player.getUniqueId(), type, damage));
         return arrow;
+    }
+
+    private void spawnThrowableVisual(Player player, WeaponType type, Material visualItem, double velocity, Vector direction) {
+        Snowball projectile = player.getWorld().spawn(player.getEyeLocation(), Snowball.class);
+        projectile.setShooter(player);
+        projectile.setItem(new ItemStack(visualItem));
+        projectile.setVelocity(direction.clone().normalize().multiply(velocity));
+        projectile.setGravity(true);
+        projectile.setSilent(true);
+        projectileData.put(projectile.getUniqueId(), new ShotData(player.getUniqueId(), type, type.damage()));
     }
 
     private void spawnFireball(Player player, WeaponType type) {
@@ -289,7 +297,7 @@ public final class WeaponService implements Listener {
             }
             int count = Math.max(1, Math.min(4, plugin.getConfig().getInt("weapons.minigun.projectiles-per-volley", 2)));
             for (int i = 0; i < count; i++) {
-                spawnSnowball(player, WeaponType.MINIGUN, WeaponType.MINIGUN.damage(), 4.0,
+                shootArrow(player, WeaponType.MINIGUN, WeaponType.MINIGUN.damage(), 4.0,
                         spread(player.getEyeLocation().getDirection(), 0.08));
             }
             minigunHeat.put(id, heat + plugin.getConfig().getInt("weapons.minigun.heat-per-volley", 5));
@@ -341,6 +349,7 @@ public final class WeaponService implements Listener {
     }
 
     private boolean consumeAmmo(Player player, Material material, int amount) {
+        if (player.getGameMode() == GameMode.CREATIVE) return true;
         PlayerInventory inventory = player.getInventory();
         ItemStack[] contents = inventory.getStorageContents();
         int available = 0;
