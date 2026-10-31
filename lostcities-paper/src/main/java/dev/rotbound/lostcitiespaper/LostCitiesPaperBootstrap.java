@@ -3,6 +3,8 @@ package dev.rotbound.lostcitiespaper;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import io.papermc.paper.plugin.lifecycle.event.registrar.RegistrarEvent;
+import io.papermc.paper.datapack.DatapackRegistrar;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
@@ -12,7 +14,7 @@ import java.util.Objects;
 public final class LostCitiesPaperBootstrap implements PluginBootstrap {
     @Override
     public void bootstrap(BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(LifecycleEvents.DATAPACK_DISCOVERY, event -> {
+        context.getLifecycleManager().registerEventHandler(LifecycleEvents.DATAPACK_DISCOVERY, (RegistrarEvent<DatapackRegistrar> event) -> {
             try {
                 URI uri = Objects.requireNonNull(
                         LostCitiesPaperBootstrap.class.getResource("/lostcities_datapack"),

@@ -57,15 +57,19 @@ public final class RegistryAssetRegistry<T extends ILostCityAsset, R extends IAs
         DynamicOps<JsonElement> ops = level.registryAccess().createSerializationContext(JsonOps.INSTANCE);
         List<Identifier> names = new ArrayList<>(resources.keySet());
         names.sort(Comparator.comparing(Identifier::toString));
-        for (Identifier name : names) {
-            Resource resource = resources.get(name);
+        String assetPrefix = "lostcities/" + folder + "/";
+        for (Identifier resourceId : names) {
+            Resource resource = resources.get(resourceId);
+            String fullPath = resourceId.getPath();
+            String assetPath = fullPath.substring(assetPrefix.length(), fullPath.length() - ".json".length());
+            Identifier assetId = Identifier.fromNamespaceAndPath(resourceId.getNamespace(), assetPath);
             try (Reader reader = resource.openAsReader()) {
                 JsonElement json = JsonParser.parseReader(reader);
                 R decoded = codec.parse(ops, json).getOrThrow();
-                decoded.setRegistryName(name);
-                definitions.put(name, decoded);
+                decoded.setRegistryName(assetId);
+                definitions.put(assetId, decoded);
             } catch (Exception e) {
-                throw new IllegalStateException("Failed to load Lost Cities " + folder + " asset " + name, e);
+                throw new IllegalStateException("Failed to load Lost Cities " + folder + " asset " + assetId, e);
             }
         }
     }

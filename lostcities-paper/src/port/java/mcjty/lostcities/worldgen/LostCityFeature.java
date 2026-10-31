@@ -12,7 +12,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ public final class LostCityFeature {
         return runWithDimensionInfo(region, diminfo -> {
             ChunkPos center = region.getCenter();
             Holder<Biome> biome = region.getBiome(center.getMiddleBlockPosition(60));
-            if (biome.is(BiomeTags.IS_VOID)) return false;
+            if (biome.is(Biomes.THE_VOID)) return false;
             try {
                 diminfo.getFeature().generate(region, region.getChunk(chunkX, chunkZ));
             } catch (Exception e) {
