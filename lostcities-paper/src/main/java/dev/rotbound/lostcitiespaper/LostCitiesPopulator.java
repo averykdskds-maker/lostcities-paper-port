@@ -10,6 +10,7 @@ import org.bukkit.generator.WorldInfo;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Hooks the upstream Lost Cities generator into Paper's FEATURES stage. The original
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class LostCitiesPopulator extends BlockPopulator {
     private final LostCitiesPaperPlugin plugin;
     private final AtomicBoolean integrationReported = new AtomicBoolean();
-    private final AtomicBoolean firstGeneration = new AtomicBoolean();
+    private final AtomicInteger generationCallbacksReported = new AtomicInteger();
 
     public LostCitiesPopulator(LostCitiesPaperPlugin plugin) {
         this.plugin = plugin;
@@ -42,7 +43,12 @@ public final class LostCitiesPopulator extends BlockPopulator {
         if (integrationReported.compareAndSet(false, true)) {
             plugin.getLogger().info("Connected original Lost Cities engine to Paper FEATURES-stage WorldGenRegion.");
         }
-        if (firstGeneration.compareAndSet(false, true)) {
+
+        // Keep a small startup trace, and always report the distant sentinel chunk used by CI.
+        // This lets the runtime smoke test distinguish a real second generation callback from
+        // merely issuing a forceload command successfully.
+        int callbackNumber = generationCallbacksReported.getAndIncrement();
+        if (callbackNumber < 3 || (chunkX == 100 && chunkZ == 100)) {
             plugin.getLogger().info("Lost Cities FEATURES generation entered for chunk " + chunkX + "," + chunkZ
                     + " in world '" + worldInfo.getName() + "'.");
         }
