@@ -118,7 +118,7 @@ jobs:
           grep -q 'Attached original Lost Cities generation to world' server.log || { echo "Lost Cities populator did not attach to the target world."; exit 1; }
           grep -q 'Lost Cities FEATURES generation entered' server.log || { echo "The forced chunk did not enter the Lost Cities FEATURES callback."; exit 1; }
           grep -q 'Lost Cities FEATURES generation entered for chunk 100,100 in world' server.log || { echo "The distant forced chunk (100,100) did not enter the Lost Cities FEATURES callback."; exit 1; }
-          force_line="$(grep -n -m1 'Marked chunk \\[100, 100\\]' server.log | cut -d: -f1)"
+          force_line="$(grep -n -F -m1 'Marked chunk [100, 100]' server.log | cut -d: -f1)"
           distant_line="$(grep -n -m1 'Lost Cities FEATURES generation entered for chunk 100,100 in world' server.log | cut -d: -f1)"
           if [[ -z "$force_line" || -z "$distant_line" ]] || (( distant_line <= force_line )); then
             echo "The distant generation callback was not observed after its force-load request."
